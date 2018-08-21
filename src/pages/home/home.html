@@ -1,0 +1,111 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>
+      <span ion-text class="fw700">Easy</span><span ion-text class="fw300">OrderBusiness</span>
+    </ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="presentNotifications($event)">
+        <ion-icon name="notifications"></ion-icon>
+      </button>
+      <button ion-button (click)="openCart()">
+        <ion-icon name="cart"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+
+  <!--<ion-toolbar color="primary">-->
+    <!--<ion-searchbar [(ngModel)]="searchKey" (ionInput)="onInput($event)" (ionCancel)="onCancel($event)"></ion-searchbar>-->
+    <!--<ion-buttons end>-->
+      <!--<button ion-button (click)="openRestaurantFilterPage()">-->
+        <!--<ion-icon name="options"></ion-icon>-->
+      <!--</button>-->
+    <!--</ion-buttons>-->
+  <!--</ion-toolbar>-->
+</ion-header>
+
+<ion-content class="lightest-bg">
+
+	<ion-grid no-padding fixed>
+		<ion-row no-padding>
+			<ion-col>
+				<!--<ion-card *ngIf="!orders.length" class="primary-bg" margin-top>-->
+				<!--<ion-card-content>-->
+				<!--<p text-center class="text-white">You still haven't any item.</p>-->
+				<!--</ion-card-content>-->
+				<!--</ion-card>-->
+
+				<ion-list no-margin>
+					<h2 ion-text color="dark" class="fw700">Order List</h2>
+					<ion-item-sliding *ngFor="let Order of orders; let id = index">
+						<div ion-item >
+							<!--<ion-thumbnail item-left>-->
+							<!--<img src="{{order.order.picture}}"/>-->
+							<!--</ion-thumbnail>-->
+
+							<!--<h2 ion-text color="dark" class="fw700">{{menu.price}}</h2>-->
+							<ion-grid class="filters" no-padding>
+								<ion-row>
+									<ion-col>
+										<!--[hidden]="order.qtd < 2"-->
+										<h2 ion-text color="dark" class="fw700">Table num : {{Order.tableNum}}</h2>
+									<h4 ion-text color="dark" class="fw700">
+										Date : {{Order.timeStamp}}<br/>
+										Order : {{Order.menu}}<br/>
+										Total Price : {{Order.totalPrice}}</h4>
+										<!--<button ion-button color="danger" (click)="minusQtd()">MINUS</button>-->
+									</ion-col>
+									<ion-col item-right>
+										<button ion-button color="danger" (click)="confirm(id)" [hidden]="!Order.status">Confirm</button>
+										<!--<h2 ion-text color="primary" class="text-18x">-->
+										<!--<span>{{ order.qtd }}</span>-->
+										<!--</h2>-->
+									</ion-col>
+								</ion-row>
+							</ion-grid>
+							<!--<div item-right>-->
+							<!--<ion-badge>{{ order.order.price * order.qtd | currency }}</ion-badge>-->
+							<!--</div>-->
+						</div>
+						<!--<ion-item-options>-->
+						<!--<button ion-button color="danger" (click)="removeOrder(order)">Delete</button>-->
+						<!--</ion-item-options>-->
+
+					</ion-item-sliding>
+					<!--<ion-card-content>-->
+
+						<!--<h1 ion-text full large color="dark">Total Order Value</h1>-->
+						<!--<h2 ion-text full large color="dark" >\u20A9 {{totalprice}}</h2>-->
+					<!--</ion-card-content>-->
+					<!--<button ion-button full large color="dark" no-margin icon-right (click)="openCheckout()">-->
+						<!--Checkout-->
+						<!--<ion-icon name="card"></ion-icon>-->
+					<!--</button>-->
+				</ion-list>
+			</ion-col>
+		</ion-row>
+
+	</ion-grid>
+</ion-content>
+
+<!--<ion-footer class="no-padding dark-bg">-->
+	<!--<ion-grid no-padding fixed>-->
+		<!--<ion-row no-padding>-->
+			<!--&lt;!&ndash;<button ion-button icon-left block color="primary" (click)="openNearbyPage()" class="col col-4">&ndash;&gt;-->
+        	<!--&lt;!&ndash;<ion-icon name="compass" class="text-18x"></ion-icon>&ndash;&gt;-->
+        	<!--&lt;!&ndash;<span ion-text class="text-12x">Nearby</span>&ndash;&gt;-->
+			<!--&lt;!&ndash;</button>&ndash;&gt;-->
+			<!--<button ion-button icon-left block color="primary" (click)="openCategoryPage()" class="col col-4">-->
+          <!--<ion-icon name="list-box" class="text-18x"></ion-icon>-->
+          <!--<span ion-text class="text-12x">Waiting</span>-->
+			<!--</button>-->
+			<!--&lt;!&ndash;<button ion-button icon-left block color="primary" (click)="openOrders()" class="col col-4">&ndash;&gt;-->
+        	<!--&lt;!&ndash;<ion-icon name="camera" class="text-18x"></ion-icon>&ndash;&gt;-->
+        	<!--&lt;!&ndash;<span ion-text class="text-12x">Order</span>&ndash;&gt;-->
+			<!--&lt;!&ndash;</button>&ndash;&gt;-->
+		<!--</ion-row>-->
+	<!--</ion-grid>-->
+
+<!--</ion-footer>-->
