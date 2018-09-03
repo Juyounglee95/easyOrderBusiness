@@ -121,7 +121,7 @@ export class HomePage {
 	_updateowner(email):Promise<any> {
 		return new Promise<any>(resolve => {
 			var status ='2'
-			var orderRef = this.db.collection('owner').where("id", "==", email).onSnapshot(querySnapshot => {
+			var orderRef = this.db.collection('owner').where("email", "==", email).onSnapshot(querySnapshot => {
 				querySnapshot.docChanges.forEach(change => {
 
 					const fooId = change.doc.id
@@ -147,7 +147,7 @@ export class HomePage {
 				querySnapshot.docChanges.forEach(change => {
 
 					const fooId = change.doc.id
-					this.db.collection('owner').doc(fooId).update({service_status:'2'});
+					this.db.collection('store').doc(fooId).update({service_status:'2'});
 					// do something with foo and fooId
 
 				})
