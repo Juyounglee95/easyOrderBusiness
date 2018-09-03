@@ -90,6 +90,9 @@
     <plugin name="ionic-plugin-keyboard" spec="^2.2.1" />
     <plugin name="cordova-sqlite-storage" spec="^2.1.4" />
     <plugin name="cordova-plugin-fcm" spec="^2.1.2" />
+    <plugin name="cordova-plugin-iamport-kcp" spec="^0.9.2">
+        <variable name="URL_SCHEME" value="ionickcp" />
+    </plugin>
     <engine name="android" spec="6.4.0" />
     <engine name="browser" spec="5.0.4" />
 </widget>

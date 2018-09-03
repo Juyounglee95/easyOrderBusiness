@@ -3,6 +3,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { IonicStorageModule } from '@ionic/storage';
+import { IamportService } from 'iamport-ionic-kcp';
+import { InAppBrowser } from '@ionic-native/in-app-browser';
 
 import {foodIonicApp} from './app.component';
 
@@ -20,6 +22,9 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { Keyboard } from '@ionic-native/keyboard';
 import { FCM } from '@ionic-native/fcm';
 import { GlobalvarsProvider } from '../providers/globalvars/globalvars';
+
+
+
 
 @NgModule({
   declarations: [
@@ -55,6 +60,8 @@ import { GlobalvarsProvider } from '../providers/globalvars/globalvars';
     CartService,
   	FCM,
     OrdersService,
+	  IamportService,
+	  InAppBrowser,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     GlobalvarsProvider
   ]

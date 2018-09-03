@@ -15,6 +15,9 @@ import {GlobalvarsProvider} from "../../providers/globalvars/globalvars";
 import {FCM} from "@ionic-native/fcm";
 import {catchError} from "rxjs/operators";
 import {_catch} from "rxjs/operator/catch";
+import { IamportService } from 'iamport-ionic-kcp';
+import { InAppBrowser } from '@ionic-native/in-app-browser';
+import { HttpClient, HttpHeaders} from "@angular/common/http";
 
 var secondaryAppConfig = {
 	apiKey: "AIzaSyBWfY4XI0s2HzK2e-vo-hi-C1FA6tDMmBA",
@@ -55,7 +58,7 @@ export class HomePage {
 	public orderCollection: any;
 	public  db = firebase.firestore();
 	status = '0';
-  constructor(public navCtrl: NavController, public platform : Platform,private fcm: FCM,public menuCtrl: MenuController, public popoverCtrl: PopoverController, public locationCtrl: AlertController, public modalCtrl: ModalController, public toastCtrl: ToastController, public service: RestaurantService) {
+  constructor(public iamport: IamportService, private theInnAppBrowser : InAppBrowser,public http: HttpClient, public navCtrl: NavController, public platform : Platform,private fcm: FCM,public menuCtrl: MenuController, public popoverCtrl: PopoverController, public locationCtrl: AlertController, public modalCtrl: ModalController, public toastCtrl: ToastController, public service: RestaurantService) {
 		this.menuCtrl.swipeEnable(true, 'authenticated');
 		this.menuCtrl.enable(true);
 	  	firebase.auth().onAuthStateChanged((user)=>{
@@ -76,10 +79,87 @@ export class HomePage {
 		//   this.getOrder();
 	  // });
   }
-  pay(){
+	pay(event) {
+		this.iamport.payment("imp94907252",  {
+			pay_method : "card",
+			merchant_uid : this.email + new Date().getTime(),
+			name : "주문명:결제테스트",
+			amount : 50000,
+			app_scheme : "ionickcp" //플러그인 설치 시 사용한 명령어 "ionic cordova plugin add cordova-plugin-iamport-kcp --variable URL_SCHEME=ionickcp" 의 URL_SCHEME 뒤에 오는 값을 넣으시면 됩니다.
+		}).then((response)=> {
+			//	console.log(response);
+			if ( response.isSuccess() ) {
+				//TODO : 결제성공일 때 처리
+				var res = this.updateownerAsync(this.email).then(status => this.status= status).then(()=>this.updatestoreAsync(this.email)).then(
+					()=>this.presentAlert()
+				).then(()=>this.navCtrl.push('page-home'))
 
-  }
-  getregister(){
+				console.log(response);
+
+			}else{
+
+			}
+		})
+			.catch((err)=> {
+				alert(err)
+			})
+		;
+	}
+	presentAlert() {
+
+		let alert = this.locationCtrl.create({
+			title: "Payment Success",
+			buttons: ['OK']
+		});
+		alert.present();
+	}
+	async  updateownerAsync(email){
+		let val = await this._updateowner(email);
+		return val;
+
+	}
+	_updateowner(email):Promise<any> {
+		return new Promise<any>(resolve => {
+			var status ='2'
+			var orderRef = this.db.collection('owner').where("id", "==", email).onSnapshot(querySnapshot => {
+				querySnapshot.docChanges.forEach(change => {
+
+					const fooId = change.doc.id
+					this.db.collection('owner').doc(fooId).update({status:'2'});
+					// do something with foo and fooId
+
+				})
+				resolve(status);
+			});
+
+
+		})
+	}
+	async  updatestoreAsync(email){
+		let val = await this._updatestore(email);
+		return val;
+
+	}
+	_updatestore(email):Promise<any> {
+		return new Promise<any>(resolve => {
+			var status ='2'
+			var orderRef = this.db.collection('store').where("owner", "==", email).onSnapshot(querySnapshot => {
+				querySnapshot.docChanges.forEach(change => {
+
+					const fooId = change.doc.id
+					this.db.collection('owner').doc(fooId).update({service_status:'2'});
+					// do something with foo and fooId
+
+				})
+				resolve(status);
+			});
+
+
+		})
+	}
+
+
+	getregister(){
   	this.platform.ready().then(()=>{
 		var res = this.resAsync().then(status=> this.status = status)})
   }
