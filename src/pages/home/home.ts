@@ -177,6 +177,8 @@ export class HomePage {
 					snapshot.forEach(doc => {
 						if(doc.data().email == this.email){
 						 res = doc.data().status
+						}else {
+							res = '0';
 						}
 
 					});
@@ -186,8 +188,8 @@ export class HomePage {
 
 				)
 				.catch(err => {
-					res='0'
-					resolve(res);
+					//res='0'
+					//resolve(res);
 					console.log('Error getting documents', err);
 				});
 
