@@ -1,0 +1,33 @@
+<ion-header>
+
+	<ion-navbar color="primary">
+		<button ion-button menuToggle>
+			<ion-icon name="menu"></ion-icon>
+		</button>
+		<ion-title>Menu Edit</ion-title>
+	</ion-navbar>
+
+</ion-header>
+
+
+<ion-content margin-top="200px" >
+	<br><br>
+	<ion-card>
+		<ion-list class="list-full-border"*ngFor="let menu of menus; let id = index">
+			<ion-item  margin-bottom text-wrap>
+				<h2 class ="fw700">{{menu.code}}</h2>
+				<!--<ion-label color="primary" >Menu Name</ion-label>-->
+				<p>
+					{{ menu.name }}
+				</p>
+				<!--<ion-label color="primary" >Menu Price</ion-label>-->
+				<p>
+					{{ menu.price }}
+				</p>
+				<button item-right ion-button small (click)="editMenu(id)" >Edit Menu</button>
+				<button item-right ion-button small (click)="presentAlert(id)" >Delete Menu</button>
+			</ion-item>
+		</ion-list>
+
+	</ion-card>
+</ion-content>

@@ -4,27 +4,23 @@
     <button ion-button menuToggle>
         <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>Category</ion-title>
+    <ion-title>Menu Registration</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 <ion-content>
+	<!--<ion-grid no-padding>-->
+		<!--<ion-row no-padding>-->
+			<ion-card-content>
 
-	<div class="card-background-page">
+				<h1 ion-text full large color="dark">Name of the Menu</h1>
+				<ion-textarea [(ngModel)]="mname" placeholder="Pizza" maxlength="20"></ion-textarea>
 
-	<ion-grid no-padding>
-		<ion-row no-padding>
-			<ion-col col-12 col-md-6 *ngFor="let category of categories">
-				<ion-card tappable (click)="openRestaurantListPage(category.name)">
-					<img [src]="category.picture" />
-					<div class="card-title">{{category.name}}</div>
-					<div class="card-subtitle">{{category.quantity}} Restaurants</div>
-				</ion-card>
-			</ion-col>
-		</ion-row>
-	</ion-grid>
+				<h1 ion-text full large color="dark">Price of the Menu</h1>
+				<ion-textarea [(ngModel)]="mprice" placeholder="8000" maxlength="20"></ion-textarea>
 
-	</div>
-
+			</ion-card-content>
+		<!--</ion-row>-->
+	<!--</ion-grid>-->
 </ion-content>
