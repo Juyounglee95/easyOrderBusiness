@@ -13,6 +13,8 @@ import * as firebase from "firebase";
 import 'firebase/firestore';
 import {GlobalvarsProvider} from "../../providers/globalvars/globalvars";
 import {FCM} from "@ionic-native/fcm";
+import {catchError} from "rxjs/operators";
+import {_catch} from "rxjs/operator/catch";
 
 var secondaryAppConfig = {
 	apiKey: "AIzaSyBWfY4XI0s2HzK2e-vo-hi-C1FA6tDMmBA",
@@ -52,7 +54,7 @@ export class HomePage {
 	public orders : Array<any>=[];
 	public orderCollection: any;
 	public  db = firebase.firestore();
-
+	status = '0';
   constructor(public navCtrl: NavController, public platform : Platform,private fcm: FCM,public menuCtrl: MenuController, public popoverCtrl: PopoverController, public locationCtrl: AlertController, public modalCtrl: ModalController, public toastCtrl: ToastController, public service: RestaurantService) {
 		this.menuCtrl.swipeEnable(true, 'authenticated');
 		this.menuCtrl.enable(true);
@@ -64,8 +66,8 @@ export class HomePage {
 	  });
 		// this.getOrder();
 		// this.findAll();
-
-	  this.initializeApp();
+	this.getregister();
+	 // this.initializeApp();
 	  // this.platform.ready().then(() => {
 	  //
 		//   this.secondaryDatabase = firebase.firestore(firebase.app('secondary'));
@@ -73,6 +75,46 @@ export class HomePage {
 		//   var store_a = this.storeAsync().then(store_a => this.store = store_a);
 		//   this.getOrder();
 	  // });
+  }
+  pay(){
+
+  }
+  getregister(){
+  	this.platform.ready().then(()=>{
+		var res = this.resAsync().then(status=> this.status = status)})
+  }
+	  async  resAsync(){
+		  let val = await this._res();
+		  return val;
+
+	  }
+	_res():Promise<any> {
+		return new Promise<any>(resolve => {
+			var res:any;
+			var resRef = this.db.collection('owner');
+			var allres = resRef.get()
+				.then(snapshot => {
+					snapshot.forEach(doc => {
+						if(doc.data().email == this.email){
+						 res = doc.data().status
+						}
+
+					});
+					console.log(res);
+						resolve(res);
+				}
+
+				)
+				.catch(err => {
+					res='0'
+					resolve(res);
+					console.log('Error getting documents', err);
+				});
+
+		})
+  }
+  register_service(){
+	  this.navCtrl.push('page-register-service', {email : this.email});
   }
 	initializeApp() {
 		this.platform.ready().then(() => {
@@ -182,8 +224,19 @@ export class HomePage {
 	// console.log(orderRef);
 	// var a = orderRef.update({status:false});
 	}
-
-
+///get doc
+// 	const usersRef = db.collection('users').doc('id')
+//
+// 	usersRef.get()
+// .then((docSnapshot) => {
+// 	if (docSnapshot.exists) {
+// 	usersRef.onSnapshot((doc) => {
+// 	// do stuff with the data
+// });
+// } else {
+// 	usersRef.set({...}) // create the document
+// }
+// });
 
 
 

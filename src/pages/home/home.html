@@ -28,16 +28,19 @@
 
 <ion-content class="lightest-bg">
 
-	<ion-grid no-padding fixed>
+	<ion-grid no-padding fixed >
 		<ion-row no-padding>
 			<ion-col>
+				<button ion-button round *ngIf="status=='0'" (click)="register_service()">Register Service</button>
+				<button ion-button round *ngIf="status=='1'" (click)="pay()">Pay for Service</button>
+
 				<!--<ion-card *ngIf="!orders.length" class="primary-bg" margin-top>-->
 				<!--<ion-card-content>-->
 				<!--<p text-center class="text-white">You still haven't any item.</p>-->
 				<!--</ion-card-content>-->
 				<!--</ion-card>-->
 
-				<ion-list no-margin>
+				<ion-list no-margin *ngIf="status=='2'">
 					<h2 ion-text color="dark" class="fw700">Order List</h2>
 					<ion-item-sliding *ngFor="let Order of orders; let id = index">
 						<div ion-item >
