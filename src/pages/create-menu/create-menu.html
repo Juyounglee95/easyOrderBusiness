@@ -1,0 +1,33 @@
+<ion-header>
+
+	<ion-navbar color="primary">
+		<button ion-button menuToggle>
+			<ion-icon name="menu"></ion-icon>
+		</button>
+		<ion-title>Menu Registration</ion-title>
+	</ion-navbar>
+
+</ion-header>
+
+<ion-content>
+	<ion-card-content>
+
+		<ion-item>
+			<h1 ion-text full large color="dark">Name of the Menu</h1>
+			<ion-input [(ngModel)]="menuname" placeholder="Pizza"></ion-input>
+		</ion-item>
+
+		<ion-item>
+			<h1 ion-text full large color="dark">Price of the Menu</h1>
+			<ion-input [(ngModel)]="menuprice" placeholder="8000"></ion-input>
+		</ion-item>
+
+		<ion-item>
+			<h1 ion-text full large color="dark">store_code</h1>
+			<ion-input [(ngModel)]="storecode" placeholder="abc"></ion-input>
+		</ion-item>
+
+		<button ion-button round (click)="addMenu()">Add menu</button>
+
+	</ion-card-content>
+</ion-content>

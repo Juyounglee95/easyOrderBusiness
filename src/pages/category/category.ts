@@ -10,7 +10,7 @@ import {CategoryService} from '../../providers/category-service-mock';
 
 @Component({
   selector: 'page-category',
-  templateUrl: 'category.html',
+
 })
 export class CategoryPage {
 
