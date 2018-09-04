@@ -101,7 +101,8 @@ export class foodIonicApp {
             // {title: 'Nearby', component: 'page-nearby', icon: 'compass'},
             {title: 'Waiting', component: 'page-category', icon: 'albums'},
             {title: 'Latest Orders', component: 'page-orders', icon: 'list-box'},
-            // {title: 'Cart', component: 'page-cart', icon: 'cart'},
+            {title: 'Register Menu', component: 'page-create-menu', icon: 'log-in'},
+			{title: 'Edit Menu', component: 'page-edit-menu', icon: 'refresh'},
 			// {title: 'Favorite Restaurants', component: 'page-favorite-list', icon: 'heart'}
         ];
 

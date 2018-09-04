@@ -67,10 +67,14 @@ export class HomePage {
 		  }else{
 		  }
 	  });
-		// this.getOrder();
+
+	 // 	this.getOrder();
 		// this.findAll();
+
 	this.getregister();
 	 this.initializeApp();
+
+
 	  // this.platform.ready().then(() => {
 	  //
 		//   this.secondaryDatabase = firebase.firestore(firebase.app('secondary'));
@@ -177,6 +181,8 @@ export class HomePage {
 					snapshot.forEach(doc => {
 						if(doc.data().email == this.email){
 						 res = doc.data().status
+						}else {
+							res = '0';
 						}
 
 					});
@@ -186,8 +192,8 @@ export class HomePage {
 
 				)
 				.catch(err => {
-					res='0'
-					resolve(res);
+					//res='0'
+					//resolve(res);
 					console.log('Error getting documents', err);
 				});
 
@@ -253,6 +259,7 @@ export class HomePage {
 							store_code:doc.data().store_code
 						});
 					});
+					console.log("####", order);
 					resolve(order);
 				})
 				.catch(err => {
