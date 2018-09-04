@@ -78,7 +78,6 @@ export class foodIonicApp {
 					this.fcm.onTokenRefresh().subscribe(token => {
 						console.log(token);
 					});
-
 					this.statusBar.overlaysWebView(false);
 					this.splashScreen.hide();
 				});
@@ -157,60 +156,12 @@ export class foodIonicApp {
 				);
 		})
 	}
-	// async checkoutAsync(){
-	// 	let check = await this._check();
-	// 	return check;
-	// }
-	// _check():Promise<any>{
-	// 	return new Promise<any>(resolve => {
-	// 		var success = "success";
-	// 		var addDoc = this.db.collection('order').add({
-    //
-	// 			menu : this.names,
-	// 			status : true,
-	// 			table_num : this.table,
-	// 			timestamp : this.date,
-	// 			totalprice : this.totalprice,
-	// 			user : firebase.auth().currentUser.email,
-	// 			store_code : this.store
-	// 		}).then(ref => {
-	// 			resolve(success);
-	// 			console.log('Added document with ID: ', ref.id);
-	// 		});
-    //
-	// 		//   resolve(store);
-	// 	})
-	// }
     initializeApp() {
         this.platform.ready().then(() => {
 
-
-
-
-			// this.db=firebase.firestore();
-			// var user = firebase.auth().currentUser;
-
-
-
-			// console.log(this.email);
-			// firebase.auth().onAuthStateChanged(function(user) {
-			// if(user!=null) {
 			console.log(this.email)
 
 			this.fcm.subscribeToTopic('abc');
-
-
-				// let secondary = firebase.initializeApp(secondaryAppConfig, "secondary");
-				// let secondaryDatabase = secondary.firestore();
-                //
-				// this.storeCollection = secondaryDatabase.collection("store");
-				// var store_a = this.storeAsync().then(store_a => this.storeCode = store_a)
-				// //.then(store_a=>{console.log("@@@@@@@@@@@@@@@@@@@@@", this.table, this.store)});;
-				// 	.then(() => {
-				// 		this.fcm.subscribeToTopic(this.storeCode);
-				// 	});
-
-
 				this.fcm.onNotification().subscribe(data => {
 					if (data.wasTapped) {
 						console.log("Received in background");
@@ -222,13 +173,6 @@ export class foodIonicApp {
 					console.log(token);
 				});
 
-
-				// 	} else {
-				// 		// No user is signed in.
-			// }
-			// });
-				// this.email = user.email;
-				// console.log(this.email);
 			this.statusBar.overlaysWebView(false);
 			this.splashScreen.hide();
         });
