@@ -67,10 +67,11 @@ export class HomePage {
 		  }else{
 		  }
 	  });
-		// this.getOrder();
+
+	 // 	this.getOrder();
 		// this.findAll();
-	this.getregister();
-	 // this.initializeApp();
+		this.getregister();
+	  this.initializeApp();
 	  // this.platform.ready().then(() => {
 	  //
 		//   this.secondaryDatabase = firebase.firestore(firebase.app('secondary'));
@@ -284,6 +285,7 @@ export class HomePage {
 							store_code:doc.data().store_code
 						});
 					});
+					console.log("####", order);
 					resolve(order);
 				})
 				.catch(err => {
