@@ -70,7 +70,7 @@ export class HomePage {
 		// this.getOrder();
 		// this.findAll();
 	this.getregister();
-	 // this.initializeApp();
+	 this.initializeApp();
 	  // this.platform.ready().then(() => {
 	  //
 		//   this.secondaryDatabase = firebase.firestore(firebase.app('secondary'));
@@ -199,35 +199,6 @@ export class HomePage {
 	initializeApp() {
 		this.platform.ready().then(() => {
 			var store_a = this.storeAsync().then(store_a=> this.store = store_a).then(()=>{this.getOrder();})
-
-	// 		// this.fcm.getToken().then(token => {
-	// 		// 	// Your best bet is to here store the token on the user's profile on the
-	// 		// 	// Firebase database, so that when you want to send notifications to this
-	// 		// 	// specific user you can do it from Cloud Functions.
-	// 		// });
-	// 		// var user = firebase.auth().currentUser;
-    //
-	// 		// if (user != null) {
-	// 		// 	this.email = user.email;
-	// 		// }
-	// 		var user = firebase.auth().currentUser;
-    //
-	// 		if (user != null) {
-	// 			this.email = firebase.auth().currentUser.email;
-	// 			let secondary = firebase.initializeApp(secondaryAppConfig, "secondary");
-	// 			this.storeCollection = this.secondaryDatabase.collection("store");
-	// 			var store_a = this.storeAsync().then(store_a => this.store = store_a).then(() => this.getOrder());
-				// .then(store_a=>{console.log("@@@@@@@@@@@@@@@@@@@@@", this.table, this.store)})
-				// this.fcm.onNotification().subscribe(data=>{
-				// 	if(data.wasTapped){
-				// 		console.log("Received in background");
-				// 	} else {
-				// 		console.log("Received in foreground");
-				// 	};
-	// 			// })
-	// 			// this.fcm.onTokenRefresh().subscribe(token=>{
-	// 			// 	console.log(token);
-	// 			// });
 	// 		}
 		});
     //
@@ -365,7 +336,7 @@ export class HomePage {
   }
 
   openCategoryPage() {
-    this.navCtrl.push('page-category');
+    this.navCtrl.push('page-restaurant-list');
   }
 
 	onInput(event) {

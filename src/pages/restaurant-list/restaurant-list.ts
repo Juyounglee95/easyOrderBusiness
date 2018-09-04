@@ -1,7 +1,19 @@
 import {Component} from '@angular/core';
-import {IonicPage, Config, NavController, NavParams, ToastController, ModalController} from 'ionic-angular';
+import {
+	IonicPage,
+	Config,
+	NavController,
+	NavParams,
+	ToastController,
+	ModalController,
+	AlertController, Platform
+} from 'ionic-angular';
 import {RestaurantService} from '../../providers/restaurant-service-mock';
 import leaflet from 'leaflet';
+
+import * as firebase from "firebase";
+import 'firebase/firestore';
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 
 @IonicPage({
 	name: 'page-restaurant-list',
@@ -9,96 +21,137 @@ import leaflet from 'leaflet';
 })
 
 @Component({
-    selector: 'page-restaurant-list',
-    templateUrl: 'restaurant-list.html'
+	selector: 'page-restaurant-list',
+	templateUrl: 'restaurant-list.html'
 })
 export class RestaurantListPage {
+	orders: Array<any> = [];
+	public store : string='';
+	public table: any;
+	public menuCollection: any;
+	public  db = firebase.firestore();
+	waitingNumber=0;
+	owner:string='';
+	order:string='';
+	total:number=0;
+	names:string='';
+	date:string='';
 
-    restaurants: Array<any>;
-    searchKey: string = "";
-    viewMode: string = "list";
-    proptype: string;
-    from: string;
-    map;
-    markersGroup;
+	restaurants: Array<any>;
+	searchKey: string = "";
+	viewMode: string = "list";
+	proptype: string;
+	from: string;
+	map;
+	markersGroup;
 
-    constructor(public navCtrl: NavController, public navParams: NavParams, public service: RestaurantService, public toastCtrl: ToastController, public modalCtrl: ModalController, public config: Config) {
-        this.findAll();
-        this.proptype = this.navParams.get('proptype') || "";
-        this.from = this.navParams.get('from') || "";
-        // console.log(this.proptype);
-    }
+	public storeCollection: any;
 
-    openFilterModal() {
-      let modal = this.modalCtrl.create('page-restaurant-filter');
-      // modal.onDidDismiss(data => {
-      //   console.log(data);
-      // });
-      modal.present();
-    }
+	constructor(public navCtrl: NavController, public navParams: NavParams, public service: RestaurantService, public platform : Platform, public toastCtrl: ToastController, public modalCtrl: ModalController, public config: Config, private alertCtrl: AlertController,  private http: HttpClient) {
+		this.platform.ready().then(() => {var store_a = this.storeAsync().then(store=> this.store = store).then(()=>{this.start();})});
+		// console.log(this.proptype);
+	}
+	async  storeAsync(){
+		let val = await this._store();
+		return val;
 
-    openRestaurantDetail(restaurant: any) {
-  		this.navCtrl.push('page-restaurant-detail', {
-			'id': restaurant.id
+	}
+	_store():Promise<any> {
+		return new Promise<any>(resolve => {
+			var store1: any;
+			this.storeCollection=this.db.collection('store');
+			this.storeCollection.where("owner", "==", firebase.auth().currentUser.email)
+				.onSnapshot(function (querySnapshot) {
+						querySnapshot.forEach(function (doc) {
+								store1 = doc.data().code;
+							}
+						)
+					resolve(store1);
+					}
+				);
+		})
+	}
+	start(){
+		var abc =this.startAsync().then(num2 => {
+			console.log(num2);
+			this.waitingNumber = num2});
+	}
+	async startAsync(){
+		let check = await this._start();
+		return check;
+	}
+	_start():Promise<any>{
+		return new Promise<any>(resolve => {
+			this.db.collection(this.store).get().then(function(querySnapshot) {
+				let a : number = querySnapshot.size;
+				console.log(a)
+				resolve(a);
+			});
+		})
+	}
+
+	waiting(){
+		var abc =this.checkoutAsync().then(num => {
+				var wait = this.waitAsync(num).then(wm => {
+					this.waitingNumber=wm;
+				})
 		});
-    }
+	}
+	async checkoutAsync(){
+		let check = await this._check();
+		return check;
+	}
+	_check():Promise<any>{
+		return new Promise<any>(resolve => {
+			let wm = 999999999;
+			this.db.collection(this.store).get().then(function(querySnapshot) {
+				querySnapshot.forEach(doc => {
+					if(wm>doc.data().order){
+						wm = doc.data().order
+					}
+				});
 
-    favorite(restaurant) {
-        this.service.favorite(restaurant)
-            .then(restaurant => {
-                let toast = this.toastCtrl.create({
-                    message: 'Property added to your favorites',
-                    cssClass: 'mytoast',
-                    duration: 2000
-                });
-                toast.present(toast);
-            });
-    }
-
-    onInput(event) {
-        this.service.findByName(this.searchKey)
-            .then(data => {
-                this.restaurants = data;
-                if (this.viewMode === "map") {
-                    this.showMarkers();
-                }
-            })
-            .catch(error => alert(JSON.stringify(error)));
-    }
-
-    onCancel(event) {
-        this.findAll();
-    }
-
-    findAll() {
-        this.service.findAll()
-            .then(data => this.restaurants = data)
-            .catch(error => alert(error));
-    }
-
-    showMap() {
-        setTimeout(() => {
-            this.map = leaflet.map("map").setView([42.361132, -71.070876], 14);
-            leaflet.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
-                attribution: 'Tiles &copy; Esri'
-            }).addTo(this.map);
-            this.showMarkers();
-        })
-    }
-
-    showMarkers() {
-        if (this.markersGroup) {
-            this.map.removeLayer(this.markersGroup);
-        }
-        this.markersGroup = leaflet.layerGroup([]);
-        this.restaurants.forEach(restaurant => {
-            if (restaurant.lat, restaurant.long) {
-                let marker: any = leaflet.marker([restaurant.lat, restaurant.long]).on('click', event => this.openRestaurantDetail(event.target.data));
-                marker.data = restaurant;
-                this.markersGroup.addLayer(marker);
-            }
-        });
-        this.map.addLayer(this.markersGroup);
-    }
-
+			});
+			resolve(wm);
+		});
+	}
+	async waitAsync(num : number){
+		let wait = await this._wait(num);
+		return wait;
+	}
+	_wait(num : number):Promise<any>{
+		return new Promise<any>(resolve => {
+			var orderRef = this.db.collection(this.store).where("order", "==", num).onSnapshot(querySnapshot => {
+				if(querySnapshot.size>0) {
+					querySnapshot.docChanges.forEach(change => {
+						const fooId = change.doc.id
+						const fooUser = change.doc.data().user
+						this.db.collection(this.store).doc(fooId).delete().then(success => {
+							let body = {
+								"notification": {
+									"title": "Waiting is done! Come to the restaurant!",
+									"body": "Waiting is done! Come to the restaurant!",
+									"sound": "default",
+									"click_action": "FCM_PLUGIN_ACTIVITY",
+									"icon": "fcm_push_icon"
+								},
+								"data": {},
+								"to": "/topics/" + fooUser,
+								"priority": "high",
+								"restricted_package_name": ""
+							}
+							let options = new HttpHeaders().set('Content-Type', 'application/json');
+							this.http.post("https://fcm.googleapis.com/fcm/send", body, {
+								headers: options.set('Authorization', 'key=AAAA94sqthU:APA91bF4quIXvQYLJlwp3mNMh6HdYpTGoDIIVOODLheD5LcLdge-JZhe4N2AaQjVMtqwDdQGhaXW4BMhkpEW9SuTwYWBuASd1bZGSaB_Me9sw3cCcUNlYa7NetC-BkX5OaBsLqFEJgRC'),
+							})
+								.subscribe();
+						});
+						this.waitingNumber -= 1;
+						// do something with foo and fooId
+					});
+				}
+			});
+			resolve();
+		});
+	}
 }
