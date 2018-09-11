@@ -1,15 +1,23 @@
 import {Component} from '@angular/core';
-import {IonicPage, ActionSheetController, ActionSheet, NavController, NavParams, ToastController} from 'ionic-angular';
+import {
+	IonicPage,
+	ActionSheetController,
+	ActionSheet,
+	NavController,
+	NavParams,
+	ToastController,
+	AlertController
+} from 'ionic-angular';
 
 import {RestaurantService} from '../../providers/restaurant-service-mock';
 import {DishService} from '../../providers/dish-service-mock';
 import {CartService} from '../../providers/cart-service-mock';
 
 import leaflet from 'leaflet';
+import * as firebase from "firebase";
 
 @IonicPage({
-	name: 'page-restaurant-detail',
-	segment: 'restaurant/:id'
+	name: 'page-restaurant-detail'
 })
 
 @Component({
@@ -17,91 +25,48 @@ import leaflet from 'leaflet';
     templateUrl: 'restaurant-detail.html'
 })
 export class RestaurantDetailPage {
-	param: number;
+	noticeTitle: string;
+	noticeContent: string;
+	favorites: Array<any> = [];
+	public  db = firebase.firestore();
+	date : any;
 
-    map;
-    markersGroup;
-    restaurant: any;
-    restaurantopts: String = 'menu';
-    dishes: Array<any>;
+	constructor(public navCtrl: NavController, public service: RestaurantService, private alertCtrl: AlertController) {
+		// this.getFavorites();
+		// console.log(this.favorites);
+	}
+	addReview(){
+		var success  = this.addReviewAsync().then(()=> this.presentAlert()).then(()=>{this.navCtrl.push('page-home');}).catch();
+		//console.log("result:",success);
 
-    constructor(public actionSheetCtrl: ActionSheetController, public navCtrl: NavController, public navParams: NavParams, public cartService: CartService, public restaurantService: RestaurantService, public dishService: DishService, public toastCtrl: ToastController) {
-			this.param = this.navParams.get('id');
-			this.restaurant = this.restaurantService.getItem(this.param) ? this.restaurantService.getItem(this.param) : this.restaurantService.getRestaurants()[0];
+	}
+	async addReviewAsync(){
+		let review = await this._addreview();
+		return review;
+	}
 
-      this.dishes = this.dishService.findAll()
-    }
+	_addreview():Promise<any>{
+		return new Promise<any>(resolve => {
+			var success = "success";
+			this.date = new Date().toUTCString();
+			var addDoc = this.db.collection('event').add({
+				title : this.noticeTitle,
+				content : this.noticeContent,
+				timeStamp: this.date
+			}).then(ref=>{
+				resolve(success);
+				console.log('Added document');
+			})
 
-    openDishDetail(dish) {
-      this.navCtrl.push('page-dish-detail', {
-				'id': dish.id
-			});
-    }
-
-    favorite(restaurant) {
-        this.restaurantService.favorite(restaurant)
-            .then(restaurant => {
-                let toast = this.toastCtrl.create({
-                    message: 'Restaurant added to your favorites',
-                    cssClass: 'mytoast',
-                    duration: 2000
-                });
-                toast.present(toast);
-            });
-    }
-
-    share(restaurant) {
-        let actionSheet: ActionSheet = this.actionSheetCtrl.create({
-            title: 'Share via',
-            buttons: [
-                {
-                    text: 'Twitter',
-                    handler: () => console.log('share via twitter')
-                },
-                {
-                    text: 'Facebook',
-                    handler: () => console.log('share via facebook')
-                },
-                {
-                    text: 'Email',
-                    handler: () => console.log('share via email')
-                },
-                {
-                    text: 'Cancel',
-                    role: 'cancel',
-                    handler: () => console.log('cancel share')
-                }
-            ]
-        });
-
-        actionSheet.present();
-    }
-
-	  openCart() {
-	    this.navCtrl.push('page-cart');
-	  }
-
-    showMarkers() {
-        if (this.markersGroup) {
-            this.map.removeLayer(this.markersGroup);
-        }
-        this.markersGroup = leaflet.layerGroup([]);
-
-        let marker: any = leaflet.marker([this.restaurant.lat, this.restaurant.long]);
-        marker.data = this.restaurant;
-        this.markersGroup.addLayer(marker);
-
-        this.map.addLayer(this.markersGroup);
-    }
-
-    showMap() {
-      setTimeout(() => {
-          this.map = leaflet.map("map-detail").setView([this.restaurant.lat, this.restaurant.long], 16);
-          leaflet.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
-              attribution: 'Tiles &copy; Esri'
-          }).addTo(this.map);
-          this.showMarkers();
-      }, 200)
-    }
+			//   resolve(store);
+		})
+	}
+	presentAlert() {
+		let alert = this.alertCtrl.create({
+			title: "Event added",
+			buttons: ['OK']
+		});
+		alert.present();
+	}
 
 }

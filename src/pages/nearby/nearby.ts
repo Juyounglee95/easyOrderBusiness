@@ -1,8 +1,9 @@
 import {Component} from '@angular/core';
-import {IonicPage, NavController, ModalController} from 'ionic-angular';
+import {IonicPage, NavController, ModalController, NavParams, AlertController} from 'ionic-angular';
 import {RestaurantService} from '../../providers/restaurant-service-mock';
 
 import leaflet from 'leaflet';
+import * as firebase from "firebase";
 
 @IonicPage({
 	name: 'page-nearby',
@@ -14,58 +15,56 @@ import leaflet from 'leaflet';
     templateUrl: 'nearby.html'
 })
 export class NearbyPage {
+	restaurants: Array<any>;
+	map;
+	markersGroup;
+	noticeTitle : any;
+	noticeContent : any;
+	timeStamp:any;
+	orders: Array<any> = [];
+	public noticeCollection: any;
+	public  db = firebase.firestore();
 
-    restaurants: Array<any>;
-    map;
-    markersGroup;
+	constructor(public navCtrl: NavController, private alertCtrl: AlertController,public service: RestaurantService, public navParams: NavParams) {
+		this.noticeTitle= this.navParams.get("title");
+		this.noticeContent= this.navParams.get("content");
+		this.timeStamp=this.navParams.get('timeStamp');
+		console.log(this.timeStamp)
+	}
 
-    constructor(public navCtrl: NavController, public service: RestaurantService, public modalCtrl: ModalController) {
-        this.findAll();
-    }
+	presentAlert() {
 
-    openRestaurantFilterPage() {
-      let modal = this.modalCtrl.create('page-restaurant-filter');
-      // modal.onDidDismiss(data => {
-      //   console.log(data);
-      // });
-      modal.present();
-    }
+		let alert = this.alertCtrl.create({
+			title: "Review edited",
+			buttons: ['OK']
+		});
+		alert.present();
+	}
+	addReview(){
+		var success  = this.editReviewAsync().then(()=> this.presentAlert()).then(()=>{this.navCtrl.push('page-home');}).catch();
+		//console.log("result:",success);
+	}
 
-    openRestaurantDetail(restaurant: any) {
-  		this.navCtrl.push('page-restaurant-detail', {
-				'id': restaurant.id
-			});
-    }
+	async editReviewAsync(){
+		let review = await this._editreview();
+		return review;
+	}
 
-    findAll() {
-        this.service.findAll()
-            .then(data => this.restaurants = data)
-            .catch(error => alert(error));
-    }
+	_editreview():Promise<any>{
+		return new Promise<any>(resolve => {
+			var success = "success";
+			var reviewRef = this.db.collection('event').where("timeStamp", "==", this.timeStamp).onSnapshot(querySnapshot => {
+				querySnapshot.docChanges.forEach(change => {
+					console.log(change)
+					const reviewid = change.doc.id;
+					this.db.collection('event').doc(reviewid).update({title: this.noticeTitle, content : this.noticeContent});
+					// do something with foo and fooId
+					resolve();
+				})
+			})
 
-    showMarkers() {
-        if (this.markersGroup) {
-            this.map.removeLayer(this.markersGroup);
-        }
-        this.markersGroup = leaflet.layerGroup([]);
-        this.restaurants.forEach(restaurant => {
-            if (restaurant.lat, restaurant.long) {
-                let marker: any = leaflet.marker([restaurant.lat, restaurant.long]).on('click', event => this.openRestaurantDetail(restaurant));
-                marker.data = restaurant;
-                this.markersGroup.addLayer(marker);
-            }
-        });
-        this.map.addLayer(this.markersGroup);
-    }
-
-    ionViewDidLoad() {
-        setTimeout(() => {
-            this.map = leaflet.map("nearby-map").setView([42.361132, -71.070876], 14);
-            leaflet.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
-                attribution: 'Tiles &copy; Esri'
-            }).addTo(this.map);
-            this.showMarkers();
-        })
-    }
+			//   resolve(store);
+		})
+	}
 
 }

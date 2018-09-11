@@ -84,7 +84,6 @@ export class RestaurantListPage {
 		return new Promise<any>(resolve => {
 			this.db.collection(this.store).get().then(function(querySnapshot) {
 				let a : number = querySnapshot.size;
-				console.log(a)
 				resolve(a);
 			});
 		})
@@ -92,6 +91,7 @@ export class RestaurantListPage {
 
 	waiting(){
 		var abc =this.checkoutAsync().then(num => {
+			console.log(num)
 				var wait = this.waitAsync(num).then(wm => {
 					this.waitingNumber=wm;
 				})
@@ -103,11 +103,12 @@ export class RestaurantListPage {
 	}
 	_check():Promise<any>{
 		return new Promise<any>(resolve => {
-			let wm = 999999999;
+			let wm = 999999;
 			this.db.collection(this.store).get().then(function(querySnapshot) {
 				querySnapshot.forEach(doc => {
+					console.log(doc.data().order)
 					if(wm>doc.data().order){
-						wm = doc.data().order
+						wm = doc.data().order;
 					}
 				});
 

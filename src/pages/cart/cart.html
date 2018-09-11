@@ -1,78 +1,49 @@
-<ion-header>
-    <ion-navbar color="primary">
-        <button ion-button menuToggle>
-            <ion-icon name="menu"></ion-icon>
-        </button>
-        <ion-title>
-        	<span ion-text>Cart</span>
-        </ion-title>
-    </ion-navbar>
-</ion-header>
+<ion-header margin-bottom="50px" >
+
+	<ion-navbar>
+		<ion-title>Event List</ion-title>
+	</ion-navbar>
+
+</ion-header >
 
 
-<ion-content class="lightest-bg">
+<ion-content margin-top="200px" *ngFor="let review of orders; let id = index">
+	<br><br>
+	<ion-card>
+		<ion-list class="list-full-border">
+			<ion-item  margin-bottom text-wrap>
 
-	<ion-grid no-padding fixed>
-		<ion-row no-padding>
-			<ion-col>
-				<ion-card *ngIf="!orders.length" class="primary-bg" margin-top>
-					<ion-card-content>
-						<p text-center class="text-white">You still haven't any item.</p>
-					</ion-card-content>
-				</ion-card>
+				<h2 >
+					Title : {{ review.title }}
+				</h2>
 
-				<ion-list no-margin>
-					<ion-item-sliding *ngFor="let order of orders">
-							<div ion-item>
-								<!-- (click)="itemTapped(favorite)" -->
-									<ion-thumbnail item-left>
-											<img src="{{order.order.picture}}"/>
-									</ion-thumbnail>
-										<h2 ion-text color="dark" class="fw700">{{order.order.name}}</h2>
-										<ion-grid class="filters" no-padding>
-											<ion-row>
-												<ion-col text-center col-2>
-													<ion-icon name="remove-circle" class="text-22x" tappable (click)="minusQtd(order)" [hidden]="order.qtd < 2"
-																		color="secondary"></ion-icon>
-												</ion-col>
-												<ion-col text-center col-3>
-													<h2 ion-text color="primary" class="text-18x">
-														<span>{{ order.qtd }}</span>
-													</h2>
-												</ion-col>
-												<ion-col text-center col-2>
-													<ion-icon name="add-circle" class="text-22x" tappable (click)="plusQtd(order)" color="secondary"></ion-icon>
-												</ion-col>
-											</ion-row>
-										</ion-grid>
-									<div item-right>
-										<ion-badge>{{ order.order.price * order.qtd | currency }}</ion-badge>
-									</div>
-							</div>
-							<ion-item-options>
-									<button ion-button color="danger" (click)="removeOrder(order)">Delete</button>
-							</ion-item-options>
-					</ion-item-sliding>
-				</ion-list>
+				<p ion-text>
+					Content : {{ review.content }}
+				</p>
+				<button item-right ion-button small (click)="updateOrder(id)" >Edit Event</button>
+				<button item-right ion-button small (click)="presentAlert(id)" >Delete Event</button>
+			</ion-item>
+		</ion-list>
 
-				<ion-card class="primary-bg" *ngIf="orders.length">
-					<ion-card-content>
-						<p ion-text color="light">Delivery Tax (30 - 60min): <span class="fw700">FREE</span></p>
-
-						<hr>
-
-						<p ion-text color="light">Total Order Value</p>
-						<h2 ion-text class="text-white fw700">{{ totalVal | currency }}</h2>
-					</ion-card-content>
-				</ion-card>
-			</ion-col>
-		</ion-row>
-	</ion-grid>
+	</ion-card>
 </ion-content>
 
-<ion-footer *ngIf="orders.length" class="no-padding">
-	<button ion-button full large color="dark" no-margin icon-right (click)="openCheckout()">
-		Checkout
-		<ion-icon name="card"></ion-icon>
-	</button>
+<ion-footer class="no-padding dark-bg">
+	<ion-grid no-padding fixed>
+		<ion-row no-padding>
+			<!--<button ion-button icon-left block color="primary" (click)="openNearbyPage()" class="col col-4">-->
+			<!--<ion-icon name="compass" class="text-18x"></ion-icon>-->
+			<!--<span ion-text class="text-12x">Nearby</span>-->
+			<!--</button>-->
+			<button ion-button icon-left block color="primary" (click)="openCategoryPage()" class="col col-4">
+				<ion-icon name="list-box" class="text-18x"></ion-icon>
+				<span ion-text class="text-12x">Enroll Event</span>
+			</button>
+			<!--<button ion-button icon-left block color="primary" (click)="openOrders()" class="col col-4">-->
+			<!--<ion-icon name="camera" class="text-18x"></ion-icon>-->
+			<!--<span ion-text class="text-12x">Order</span>-->
+			<!--</button>-->
+		</ion-row>
+	</ion-grid>
+
 </ion-footer>
