@@ -36,6 +36,7 @@ export class RestaurantListPage {
 	total:number=0;
 	names:string='';
 	date:string='';
+	num2:number=0;
 
 	restaurants: Array<any>;
 	searchKey: string = "";
@@ -54,7 +55,6 @@ export class RestaurantListPage {
 	async  storeAsync(){
 		let val = await this._store();
 		return val;
-
 	}
 	_store():Promise<any> {
 		return new Promise<any>(resolve => {
@@ -72,9 +72,9 @@ export class RestaurantListPage {
 		})
 	}
 	start(){
-		var abc =this.startAsync().then(num2 => {
-			console.log(num2);
-			this.waitingNumber = num2});
+			var abc =this.startAsync().then(num2 => {
+				console.log(num2);
+				this.waitingNumber = num2});
 	}
 	async startAsync(){
 		let check = await this._start();
@@ -90,12 +90,14 @@ export class RestaurantListPage {
 	}
 
 	waiting(){
-		var abc =this.checkoutAsync().then(num => {
-			console.log(num)
-				var wait = this.waitAsync(num).then(wm => {
+		if(this.waitingNumber!=0){
+			var abc =this.checkoutAsync().then(num => {
+				this.num2=num;
+				var wait = this.waitAsync(this.num2).then(wm => {
 					this.waitingNumber=wm;
 				})
-		});
+			});
+		}
 	}
 	async checkoutAsync(){
 		let check = await this._check();
@@ -103,7 +105,7 @@ export class RestaurantListPage {
 	}
 	_check():Promise<any>{
 		return new Promise<any>(resolve => {
-			let wm = 999999;
+			let wm = 9999999;
 			this.db.collection(this.store).get().then(function(querySnapshot) {
 				querySnapshot.forEach(doc => {
 					console.log(doc.data().order)
@@ -111,14 +113,32 @@ export class RestaurantListPage {
 						wm = doc.data().order;
 					}
 				});
-
+				resolve(wm);
 			});
-			resolve(wm);
 		});
 	}
 	async waitAsync(num : number){
 		let wait = await this._wait(num);
 		return wait;
+	}
+	push(fooUser){
+		let body = {
+			"notification": {
+				"title": "Waiting is done! Come to the restaurant!",
+				"body": "Waiting is done! Come to the restaurant!",
+				"sound": "default",
+				"click_action": "FCM_PLUGIN_ACTIVITY",
+				"icon": "fcm_push_icon"
+			},
+			"data": {},
+			"to": "/topics/" + fooUser,
+			"priority": "high",
+			"restricted_package_name": ""
+		}
+		let options = new HttpHeaders().set('Content-Type', 'application/json');
+		this.http.post("https://fcm.googleapis.com/fcm/send", body, {
+			headers: options.set('Authorization', 'key=AAAA94sqthU:APA91bHKb0t-b2rI3Z5OGu8fIYiOUmtOD--7gj4lBX5y7l8N418XFG3Qjmjo5UWU5kq1-kriF6S6A2smWcacheDof_vfqrw-jM_5DzSWhNEEkM4iX4LbyNelSefU8SyQEVpZJj_cid3t'),
+		}).subscribe();
 	}
 	_wait(num : number):Promise<any>{
 		return new Promise<any>(resolve => {
@@ -127,32 +147,15 @@ export class RestaurantListPage {
 					querySnapshot.docChanges.forEach(change => {
 						const fooId = change.doc.id
 						const fooUser = change.doc.data().user
-						this.db.collection(this.store).doc(fooId).delete().then(success => {
-							let body = {
-								"notification": {
-									"title": "Waiting is done! Come to the restaurant!",
-									"body": "Waiting is done! Come to the restaurant!",
-									"sound": "default",
-									"click_action": "FCM_PLUGIN_ACTIVITY",
-									"icon": "fcm_push_icon"
-								},
-								"data": {},
-								"to": "/topics/" + fooUser,
-								"priority": "high",
-								"restricted_package_name": ""
-							}
-							let options = new HttpHeaders().set('Content-Type', 'application/json');
-							this.http.post("https://fcm.googleapis.com/fcm/send", body, {
-								headers: options.set('Authorization', 'key=AAAA94sqthU:APA91bF4quIXvQYLJlwp3mNMh6HdYpTGoDIIVOODLheD5LcLdge-JZhe4N2AaQjVMtqwDdQGhaXW4BMhkpEW9SuTwYWBuASd1bZGSaB_Me9sw3cCcUNlYa7NetC-BkX5OaBsLqFEJgRC'),
-							})
-								.subscribe();
+						this.db.collection(this.store).doc(fooId).delete().then(()=>{this.push(fooId)}).then(()=>{
+							let num
+							num = this.waitingNumber-1;
+							resolve(num);
 						});
-						this.waitingNumber -= 1;
 						// do something with foo and fooId
 					});
 				}
 			});
-			resolve();
 		});
 	}
 }
