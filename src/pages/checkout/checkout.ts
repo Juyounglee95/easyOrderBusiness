@@ -1,8 +1,10 @@
 import {Component} from "@angular/core";
-import {IonicPage, NavController, NavParams, LoadingController, ToastController} from "ionic-angular";
+import {IonicPage, NavController, NavParams, LoadingController, ToastController, AlertController} from "ionic-angular";
 import {Storage} from '@ionic/storage';
 import {OrdersService} from '../../providers/orders-service-mock';
 import {CartService} from '../../providers/cart-service-mock';
+import {RestaurantService} from "../../providers/restaurant-service-rest";
+import * as firebase from "firebase";
 
 @IonicPage({
 	name: 'page-checkout',
@@ -15,52 +17,55 @@ import {CartService} from '../../providers/cart-service-mock';
 })
 export class CheckoutPage {
 
-  checkoutData: any;
-  paymethods: string = 'creditcard';
-  totalVal: number = 0;
-  orderNumber: number = Math.floor(Math.random() * 10000);
+	restaurants: Array<any>;
+	map;
+	markersGroup;
+	noticeTitle : any;
+	noticeContent : any;
+	timeStamp:any;
+	orders: Array<any> = [];
+	public noticeCollection: any;
+	public  db = firebase.firestore();
 
-  constructor(public nav: NavController, public navParams: NavParams, private storage: Storage, public ordersService: OrdersService, public cartService: CartService, public loadingCtrl: LoadingController, public toastCtrl: ToastController) {
-    this.checkoutData = this.navParams.data.orders;
+	constructor(public navCtrl: NavController, private alertCtrl: AlertController,public service: RestaurantService, public navParams: NavParams) {
+		this.noticeTitle= this.navParams.get("title");
+		this.noticeContent= this.navParams.get("content");
+		this.timeStamp=this.navParams.get('timeStamp');
+		console.log(this.timeStamp)
+	}
 
-    if (this.checkoutData) {
-	  	this.checkoutData.forEach((val, i) => {
-	  		this.totalVal = this.totalVal + (val.order.price * val.qtd)
-	  	});
+	presentAlert() {
 
-	  	this.storage.set('order-' + this.orderNumber, this.checkoutData);
-    } else {
-    	this.nav.setRoot('page-home');
-    }
+		let alert = this.alertCtrl.create({
+			title: "Review edited",
+			buttons: ['OK']
+		});
+		alert.present();
+	}
+	addReview(){
+		var success  = this.editReviewAsync().then(()=> this.presentAlert()).then(()=>{this.navCtrl.push('page-home');}).catch();
+		//console.log("result:",success);
+	}
 
-    // console.log(this.checkoutData);
-  }
+	async editReviewAsync(){
+		let review = await this._editreview();
+		return review;
+	}
 
-  // process send button
-  send() {
-    let loader = this.loadingCtrl.create({
-      content: "Please wait..."
-    });
-    // show message
-    let toast = this.toastCtrl.create({
-      showCloseButton: true,
-      cssClass: 'profile-bg',
-      message: 'Your order has been done successfully!',
-      duration: 3000,
-      position: 'bottom'
-    });
+	_editreview():Promise<any>{
+		return new Promise<any>(resolve => {
+			var success = "success";
+			var reviewRef = this.db.collection('event').where("timeStamp", "==", this.timeStamp).onSnapshot(querySnapshot => {
+				querySnapshot.docChanges.forEach(change => {
+					console.log(change)
+					const reviewid = change.doc.id;
+					this.db.collection('event').doc(reviewid).update({title: this.noticeTitle, content : this.noticeContent});
+					// do something with foo and fooId
+					resolve();
+				})
+			})
 
-    loader.present();
-
-    setTimeout(() => {
-      loader.dismiss();
-
-      this.ordersService.saveOrder(this.checkoutData, this.totalVal, this.orderNumber).then(data => {
-      	toast.present();
-      	this.cartService.cleanCart();
-      })
-      // back to home page
-      this.nav.setRoot('page-home');
-    }, 3000)
-  }
+			//   resolve(store);
+		})
+	}
 }

@@ -1,30 +1,24 @@
-import {Component} from '@angular/core';
-import {
-	IonicPage,
-	ActionSheetController,
-	ActionSheet,
-	NavController,
-	NavParams,
-	ToastController,
-	AlertController
-} from 'ionic-angular';
-
-import {RestaurantService} from '../../providers/restaurant-service-mock';
-import {DishService} from '../../providers/dish-service-mock';
-import {CartService} from '../../providers/cart-service-mock';
-
-import leaflet from 'leaflet';
+import { Component } from '@angular/core';
+import {AlertController, IonicPage, NavController, NavParams} from 'ionic-angular';
+import {RestaurantService} from "../../providers/restaurant-service-rest";
 import * as firebase from "firebase";
 
-@IonicPage({
-	name: 'page-restaurant-detail'
-})
+/**
+ * Generated class for the EventAddPage page.
+ *
+ * See https://ionicframework.com/docs/components/#navigation for more info on
+ * Ionic pages and navigation.
+ */
 
-@Component({
-    selector: 'page-restaurant-detail',
-    templateUrl: 'restaurant-detail.html'
+@IonicPage({
+	name: 'page-event-add',
+	segment: 'event-add'
 })
-export class RestaurantDetailPage {
+@Component({
+  selector: 'page-event-add',
+  templateUrl: 'event-add.html',
+})
+export class EventAddPage {
 	noticeTitle: string;
 	noticeContent: string;
 	favorites: Array<any> = [];

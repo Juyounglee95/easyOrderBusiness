@@ -1,20 +1,18 @@
 import { Component } from '@angular/core';
 import {AlertController, IonicPage, NavController, NavParams} from 'ionic-angular';
 
-import { CartService } from '../../providers/cart-service-mock';
 import * as firebase from "firebase";
 
 @IonicPage({
-	name: 'page-cart',
-	segment: 'cart'
+	name: 'page-event',
+	segment: 'event'
 })
 
 @Component({
-  selector: 'page-cart',
-  templateUrl: 'cart.html',
+	selector: 'page-event',
+	templateUrl: 'event.html',
 })
-
-export class CartPage {
+export class EventPage {
 
 	orders: Array<any> = [];
 	public noticeCollection: any;
@@ -22,7 +20,7 @@ export class CartPage {
 	title:any;
 	content:any;
 
-	constructor(public navCtrl: NavController, public navParams: NavParams, public alert:AlertController, public cartService:CartService) {
+	constructor(public navCtrl: NavController, public navParams: NavParams, public alert:AlertController) {
 		this.getOrders();
 	}
 
@@ -91,7 +89,7 @@ export class CartPage {
 	}
 	updateOrder(id) {
 		var orderdoc_id = this.orders[id].timeStamp;
-		this.navCtrl.push('page-nearyby', {'content' : this.orders[id].content, 'title' : this.orders[id].title, 'timeStamp' : orderdoc_id});
+		this.navCtrl.push('page-nearyby', {'content':this.orders[id].content, 'title':this.orders[id].title, 'timeStamp':orderdoc_id});
 	}
 	presentAlert2() {
 

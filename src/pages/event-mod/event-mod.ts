@@ -1,20 +1,25 @@
-import {Component} from '@angular/core';
-import {IonicPage, NavController, ModalController, NavParams, AlertController} from 'ionic-angular';
-import {RestaurantService} from '../../providers/restaurant-service-mock';
-
-import leaflet from 'leaflet';
+import { Component } from '@angular/core';
+import {AlertController, IonicPage, NavController, NavParams} from 'ionic-angular';
+import {RestaurantService} from "../../providers/restaurant-service-rest";
 import * as firebase from "firebase";
 
-@IonicPage({
-	name: 'page-nearby',
-	segment: 'nearby'
-})
+/**
+ * Generated class for the EventModPage page.
+ *
+ * See https://ionicframework.com/docs/components/#navigation for more info on
+ * Ionic pages and navigation.
+ */
 
-@Component({
-    selector: 'page-nearby',
-    templateUrl: 'nearby.html'
+@IonicPage({
+	name: 'page-event-mod',
+	segment: 'event-mod'
 })
-export class NearbyPage {
+@Component({
+  selector: 'page-event-mod',
+  templateUrl: 'event-mod.html',
+})
+export class EventModPage {
+
 	restaurants: Array<any>;
 	map;
 	markersGroup;
@@ -66,5 +71,6 @@ export class NearbyPage {
 			//   resolve(store);
 		})
 	}
+
 
 }
