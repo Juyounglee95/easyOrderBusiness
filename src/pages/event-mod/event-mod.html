@@ -1,0 +1,25 @@
+<ion-header>
+
+	<ion-navbar>
+		<ion-title>Event</ion-title>
+	</ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+	<ion-list>
+		<ion-item>
+			<ion-label color="primary" >Title</ion-label>
+
+			<ion-input [(ngModel)]="noticeTitle" placeholder="Write Event"></ion-input>
+		</ion-item>
+		<ion-item>
+			<ion-label color="primary" >Content</ion-label>
+
+			<ion-input [(ngModel)]="noticeContent" placeholder="Write Event"></ion-input>
+		</ion-item>
+
+	</ion-list>
+	<button ion-button round (click)="addReview()">Edit Event</button>
+</ion-content>
