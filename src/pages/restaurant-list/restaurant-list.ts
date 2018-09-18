@@ -157,6 +157,8 @@ export class RestaurantListPage {
 						});
 						// do something with foo and fooId
 					});
+				}else{
+					resolve(this.waitingNumber);
 				}
 			});
 		});
