@@ -54,7 +54,6 @@ export class RestaurantListPage {
 	async  storeAsync(){
 		let val = await this._store();
 		return val;
-
 	}
 	_store():Promise<any> {
 		return new Promise<any>(resolve => {
@@ -88,7 +87,6 @@ export class RestaurantListPage {
 			});
 		})
 	}
-
 	waiting(){
 		var abc =this.checkoutAsync().then(num => {
 			console.log(num)
@@ -109,9 +107,10 @@ export class RestaurantListPage {
 					console.log(doc.data().order)
 					if(wm>doc.data().order){
 						wm = doc.data().order;
+					}else if(doc.data().order==null){
+						wm = 0;
 					}
 				});
-
 			});
 			resolve(wm);
 		});
@@ -143,16 +142,17 @@ export class RestaurantListPage {
 							}
 							let options = new HttpHeaders().set('Content-Type', 'application/json');
 							this.http.post("https://fcm.googleapis.com/fcm/send", body, {
-								headers: options.set('Authorization', 'key=AAAA94sqthU:APA91bF4quIXvQYLJlwp3mNMh6HdYpTGoDIIVOODLheD5LcLdge-JZhe4N2AaQjVMtqwDdQGhaXW4BMhkpEW9SuTwYWBuASd1bZGSaB_Me9sw3cCcUNlYa7NetC-BkX5OaBsLqFEJgRC'),
+								headers: options.set('Authorization', 'key=AAAA94sqthU:APA91bHKb0t-b2rI3Z5OGu8fIYiOUmtOD--7gj4lBX5y7l8N418XFG3Qjmjo5UWU5kq1-kriF6S6A2smWcacheDof_vfqrw-jM_5DzSWhNEEkM4iX4LbyNelSefU8SyQEVpZJj_cid3t'),
 							})
 								.subscribe();
+						}).then(()=>{
+							let wm = this.waitingNumber-1;
+							resolve(wm);
 						});
-						this.waitingNumber -= 1;
 						// do something with foo and fooId
 					});
 				}
 			});
-			resolve();
 		});
 	}
 }
