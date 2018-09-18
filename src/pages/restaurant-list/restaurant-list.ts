@@ -36,6 +36,7 @@ export class RestaurantListPage {
 	total:number=0;
 	names:string='';
 	date:string='';
+	num2:number=0;
 
 	restaurants: Array<any>;
 	searchKey: string = "";
@@ -54,6 +55,7 @@ export class RestaurantListPage {
 	async  storeAsync(){
 		let val = await this._store();
 		return val;
+
 	}
 	_store():Promise<any> {
 		return new Promise<any>(resolve => {
@@ -87,13 +89,16 @@ export class RestaurantListPage {
 			});
 		})
 	}
+
 	waiting(){
-		var abc =this.checkoutAsync().then(num => {
-			console.log(num)
-				var wait = this.waitAsync(num).then(wm => {
+		if(this.waitingNumber!=0){
+			var abc =this.checkoutAsync().then(num => {
+				this.num2=num;
+				var wait = this.waitAsync(this.num2).then(wm => {
 					this.waitingNumber=wm;
 				})
-		});
+			});
+		}
 	}
 	async checkoutAsync(){
 		let check = await this._check();
@@ -101,7 +106,7 @@ export class RestaurantListPage {
 	}
 	_check():Promise<any>{
 		return new Promise<any>(resolve => {
-			let wm = 999999;
+			let wm = 9999999;
 			this.db.collection(this.store).get().then(function(querySnapshot) {
 				querySnapshot.forEach(doc => {
 					console.log(doc.data().order)
@@ -111,6 +116,7 @@ export class RestaurantListPage {
 						wm = 0;
 					}
 				});
+
 			});
 			resolve(wm);
 		});
