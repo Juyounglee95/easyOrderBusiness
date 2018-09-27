@@ -23,7 +23,7 @@ import { Keyboard } from '@ionic-native/keyboard';
 import { FCM } from '@ionic-native/fcm';
 import { GlobalvarsProvider } from '../providers/globalvars/globalvars';
 
-
+import{NativeGeocoder} from "@ionic-native/native-geocoder";
 
 
 @NgModule({
@@ -62,6 +62,7 @@ import { GlobalvarsProvider } from '../providers/globalvars/globalvars';
     OrdersService,
 	  IamportService,
 	  InAppBrowser,
+	  NativeGeocoder,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     GlobalvarsProvider
   ]

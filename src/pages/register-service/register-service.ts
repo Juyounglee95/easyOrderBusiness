@@ -3,6 +3,8 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { AlertController } from 'ionic-angular';
 import * as firebase from "firebase";
 import 'firebase/firestore';
+import {NativeGeocoder, NativeGeocoderReverseResult, NativeGeocoderOptions, NativeGeocoderForwardResult} from "@ionic-native/native-geocoder";
+
 /**
  * Generated class for the RegisterServicePage page.
  *
@@ -22,11 +24,11 @@ export class RegisterServicePage {
 	email : any;
 	name: any;
 	phone: any;
-	location: any;
+	location: Array<any>=[];
 	address: any;
 	business_hours: any;
 	public  db = firebase.firestore();
-  constructor(public navCtrl: NavController, public navParams: NavParams,private alertCtrl: AlertController) {
+  constructor(private nativeGeocoder: NativeGeocoder, public navCtrl: NavController, public navParams: NavParams,private alertCtrl: AlertController) {
 	this.email = this.navParams.get("email");
   }
 	RegisterService(){
@@ -51,15 +53,25 @@ export class RegisterServicePage {
 			var success = "success";
 			this.date = new Date().toUTCString();
 			//this.id = this.id.toString();
+			let options: NativeGeocoderOptions = {
+				useLocale: true,
+				maxResults :5
+			};
+			this.nativeGeocoder.forwardGeocode(this.address, options)
+				.then((coordinates: NativeGeocoderForwardResult[]) => this.location= coordinates)
+				.catch((error: any) => console.log(error));
+
+
 			var addDoc = this.db.collection('owner').add({
 				email : this.email,
 				status : '1',
 				phone : this.phone
-			}).then(()=>{
+			}).
+			then(()=>{
 				var addStore = this.db.collection('store').add({
 					code:"",
 					info:this.address+", "+this.business_hours,
-					location: this.location,
+					location: this.location[0].latitude+","+this.location[0].longitude,
 					name : this.name,
 					owner: this.email,
 					phone: this.phone,
