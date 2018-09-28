@@ -64,6 +64,7 @@ export class HomePage {
 	  	firebase.auth().onAuthStateChanged((user)=>{
 		  if(user){
 			  this.email=user.email;
+			  console.log("%%email", this.email);
 		  }else{
 		  }
 	  });
@@ -181,12 +182,11 @@ export class HomePage {
 					snapshot.forEach(doc => {
 						if(doc.data().email == this.email){
 						 res = doc.data().status
-						}else {
-							res = '0';
+
 						}
 
 					});
-					console.log(res);
+					console.log("status: ",res);
 						resolve(res);
 				}
 
@@ -204,8 +204,12 @@ export class HomePage {
   }
 	initializeApp() {
 		this.platform.ready().then(() => {
-			var store_a = this.storeAsync().then(store_a=> this.store = store_a).then(()=>{this.getOrder();})
-	// 		}
+			if(this.status=='2') {
+				var store_a = this.storeAsync().then(store_a => this.store = store_a).then(() => {
+					this.getOrder();
+				})
+			}
+
 		});
     //
 	}

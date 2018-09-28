@@ -1,35 +1,87 @@
-<ion-header>
 
-	<ion-navbar color="primary">
+
+<!--
+  Generated template for the ReviewPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+	<ion-navbar  color="primary">
 		<button ion-button menuToggle>
 			<ion-icon name="menu"></ion-icon>
 		</button>
-		<ion-title>Edit Menu</ion-title>
+		<ion-title>
+			<span ion-text>Edit Menu</span>
+		</ion-title>
 	</ion-navbar>
-
 </ion-header>
 
+<ion-content class="your-restaurant lightest-bg">
 
-<ion-content padding>
-	<ion-list>
-		<ion-item>
-			<ion-label>Menu INFO</ion-label>
-			<ion-label color="primary" >{{name}}</ion-label>
-			<ion-label color="primary" >{{price}}</ion-label>
-			<!--<ion-input [(ngModel)]="reviewtext" placeholder="Write Review"></ion-input>-->
-		</ion-item>
-		<ion-item>
-			<ion-label color="primary" >MENU</ion-label>
+	<ion-grid no-padding fixed>
+		<ion-row no-padding>
+			<ion-col>
+				<ion-card class="primary-bg">
+					<ion-card-content>
+						<p class="text-white">Complete the form with your menu data and save it.</p>
+					</ion-card-content>
+				</ion-card>
 
-			<ion-input [(ngModel)]="menu_name" value={{name}} placeholder="Input menu name"></ion-input>
-		</ion-item>
-		<ion-item>
-			<ion-label color="primary" >PRICE</ion-label>
+				<ion-card>
+					<ion-card-content>
+						<form [formGroup]="onYourRestaurantForm" class="list-form">
+							<ion-list margin-bottom>
 
-			<ion-input [(ngModel)]="menu_price" value={{price}}  placeholder="Input price"></ion-input>
-		</ion-item>
+								<ion-item>
+									<ion-label color="primary" stacked>Menu title:</ion-label>
+									<ion-input [(ngModel)]="menu_name" value={{name}} formControlName="restaurantTitle"></ion-input>
+								</ion-item>
+								<p ion-text color="danger" class="text-1x has-error" *ngIf="onYourRestaurantForm.get('restaurantTitle').touched && onYourRestaurantForm.get('restaurantTitle').hasError('required')">This field is required</p>
 
-	</ion-list>
-	<button ion-button round (click)="addReview()">Edit Review</button>
+								<ion-item>
+									<ion-label color="primary" stacked>Menu Price: $ </ion-label>
+									<ion-input  [(ngModel)]="menu_price" value={{price}} formControlName="restaurantAddress"></ion-input>
+								</ion-item>
+								<p ion-text color="danger" class="text-1x has-error" *ngIf="onYourRestaurantForm.get('restaurantAddress').touched && onYourRestaurantForm.get('restaurantAddress').hasError('required')">This field is required</p>
+
+							</ion-list>
+
+							<button ion-button block color="dark" (click)="addReview()" [disabled]="!onYourRestaurantForm.valid">Save</button>
+						</form>
+					</ion-card-content>
+				</ion-card>
+
+			</ion-col>
+		</ion-row>
+	</ion-grid>
+
+
+
+
 </ion-content>
+
+
+<!--<ion-content padding>-->
+	<!--<ion-list>-->
+		<!--<ion-item>-->
+			<!--<ion-label>Menu INFO</ion-label>-->
+			<!--<ion-label color="primary" >{{name}}</ion-label>-->
+			<!--<ion-label color="primary" >{{price}}</ion-label>-->
+			<!--&lt;!&ndash;<ion-input [(ngModel)]="reviewtext" placeholder="Write Review"></ion-input>&ndash;&gt;-->
+		<!--</ion-item>-->
+		<!--<ion-item>-->
+			<!--<ion-label color="primary" >MENU</ion-label>-->
+
+			<!--<ion-input [(ngModel)]="menu_name" value={{name}} placeholder="Input menu name"></ion-input>-->
+		<!--</ion-item>-->
+		<!--<ion-item>-->
+			<!--<ion-label color="primary" >PRICE</ion-label>-->
+
+			<!--<ion-input [(ngModel)]="menu_price" value={{price}}  placeholder="Input price"></ion-input>-->
+		<!--</ion-item>-->
+
+	<!--</ion-list>-->
+	<!--<button ion-button round (click)="addReview()">Edit Review</button>-->
+<!--</ion-content>-->
 

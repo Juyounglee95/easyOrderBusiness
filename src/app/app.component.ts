@@ -103,7 +103,7 @@ export class foodIonicApp {
             // {title: 'Latest Orders', component: 'page-orders', icon: 'list-box'},
             {title: 'Register Menu', component: 'page-create-menu', icon: 'log-in'},
 			{title: 'Edit Menu', component: 'page-edit-menu', icon: 'refresh'},
-			{title: 'Events', component: 'page-cart', icon: 'albums'},
+			{title: 'Events', component: 'page-event', icon: 'albums'},
 			{title: 'Notice', component: 'page-notice', icon: 'list-box'},
 			// {title: 'Favorite Restaurants', component: 'page-favorite-list', icon: 'heart'}
         ];

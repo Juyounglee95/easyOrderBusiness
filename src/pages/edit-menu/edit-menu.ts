@@ -32,6 +32,38 @@ export class EditMenuPage {
 	  this.id = this.navParams.get("id");
 	  this.openMenus()
   }
+	getstorename(){
+  	for(let i=0; i<this.menus.length; i++){
+  		var menu_a= this.storeAsync(this.menus[i].code).then(name => this.menus[i].store= name).then(()=> console.log(this.menus[i].store))
+	}
+		// var menu_a = this.storeAsync().then(menu_a=> this.store= menu_a)
+		// 	.then(()=>console.log(this.store)).catch();
+	}
+	async storeAsync(code){
+		let menu = await this._store(code);
+		return menu;
+	}
+	_store(code):Promise<any>{
+		return new Promise<any>(resolve => {
+			var store:any;
+
+			this.db.collection("store").where("code", "==",code).get()
+				.then(snapshot => {
+					snapshot.forEach(doc => {
+						store = doc.data().name
+					});
+					resolve(store);
+				})
+				.catch(err => {
+					console.log('Error getting documents', err);
+				});
+
+			//   resolve(store);
+		})
+	}
+
+
+
 	async getMenuAsync(){
 		let text = await this._getMenu();
 		return text;
@@ -63,13 +95,13 @@ export class EditMenuPage {
 	}
 
 	openMenus(){
-		var review_a = this.getMenuAsync().then(text=> this.menus= text).then(()=>console.log(this.menus));
+		var review_a = this.getMenuAsync().then(text=> this.menus= text).then(()=>this.getstorename());
 	}
 	editMenu(id){
 		this.navCtrl.push('page-write-edit-menu',{
 			'name': this.menus[id].name,
 			'price': this.menus[id].price,
-			'code': this.menus[id].code
+			'id': this.menus[id].id
 
 		})
 	}

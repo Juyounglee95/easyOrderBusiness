@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import {IonicPage, LoadingController, NavController, NavParams, ToastController} from 'ionic-angular';
 import { AlertController } from 'ionic-angular';
 import * as firebase from "firebase";
 import 'firebase/firestore';
-
+import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 /**
  * Generated class for the WriteEditMenuPage page.
  *
@@ -31,11 +31,47 @@ export class WriteEditMenuPage {
 	menu_price : any;
 	menu_name: any;
 	code : any;
-  constructor(public navCtrl: NavController, public navParams: NavParams ,private alertCtrl: AlertController) {
+	public onYourRestaurantForm: FormGroup;
+  constructor(public loadingCtrl: LoadingController, public toastCtrl: ToastController, private _fb: FormBuilder,public navCtrl: NavController, public navParams: NavParams ,private alertCtrl: AlertController) {
 	  this.name = this.navParams.get("name");
 	  this.price = this.navParams.get("price");
-	  this.code = this.navParams.get("code")
+	  this.id = this.navParams.get("id")
   }
+	ngOnInit() {
+		this.onYourRestaurantForm = this._fb.group({
+
+			restaurantTitle: ['', Validators.compose([
+				Validators.required
+			])],
+			restaurantAddress: ['', Validators.compose([
+				Validators.required
+			])],
+
+		});
+	}
+	presentToast() {
+		// send booking info
+		let loader = this.loadingCtrl.create({
+			content: "Please wait..."
+		});
+		// show message
+		let toast = this.toastCtrl.create({
+			showCloseButton: true,
+			cssClass: 'profiles-bg',
+			message: 'Your Menu was changed!',
+			duration: 3000,
+			position: 'bottom'
+		});
+
+		loader.present();
+
+		setTimeout(() => {
+			loader.dismiss();
+			toast.present();
+			// back to home page
+			this.navCtrl.setRoot('page-home');
+		}, 3000)
+	}
 	onModelChange(event){
 		console.log(event);
 	}
@@ -50,7 +86,7 @@ export class WriteEditMenuPage {
 			this.date = new Date().toUTCString();
 			//var orderid = this.id;
 			var code = this.code;
-			var reviewRef = this.db.collection('menu').where("store_code", "==", code).onSnapshot(querySnapshot => {
+			var reviewRef = this.db.collection('menu').where("id", "==", this.id).onSnapshot(querySnapshot => {
 				querySnapshot.docChanges.forEach(change => {
 					const reviewid = change.doc.id;
 					this.db.collection('menu').doc(reviewid).update({menu: this.menu_name, price : this.menu_price});
@@ -73,7 +109,7 @@ export class WriteEditMenuPage {
 		alert.present();
 	}
 	addReview(){
-		var success  = this.editMenuAsync().then(()=> this.presentAlert()).then(()=>{this.navCtrl.push('page-home');}).catch();
+		var success  = this.editMenuAsync().then(()=> this.presentToast()).catch();
 		console.log("result:",success);
 
 	}

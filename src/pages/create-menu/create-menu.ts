@@ -1,9 +1,9 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { Component ,OnInit} from '@angular/core';
+import {IonicPage, LoadingController, NavController, NavParams, ToastController} from 'ionic-angular';
 import { AlertController } from 'ionic-angular';
 import * as firebase from "firebase";
 import 'firebase/firestore';
-
+import { FormBuilder, FormArray, FormGroup, Validators } from '@angular/forms';
 /**
  * Generated class for the CreateMenuPage page.
  *
@@ -27,28 +27,63 @@ export class CreateMenuPage {
 	code : any;
 	id: any;
 	public  db = firebase.firestore();
-
-  constructor(public navCtrl: NavController, public navParams: NavParams ,private alertCtrl: AlertController) {
+	public menuform : FormGroup;
+  constructor(public loadingCtrl: LoadingController, public toastCtrl: ToastController,private _fb: FormBuilder,public navCtrl: NavController, public navParams: NavParams ,private alertCtrl: AlertController) {
 	  this.code = this.navParams.get("code");
+	  this.menuform = this._fb.group({
 
+
+		  storecode: ['',
+			  Validators.required
+		  ],
+		  menus : this._fb.array([
+			  this.initmenu()
+		  ])
+	  });
   }
+
+	initmenu():FormGroup {
+  	return this._fb.group(
+		{
+			menuName :['', Validators.required],
+			menuPrice :['', Validators.required]
+		}
+	);
+	}
+	addNewMenufield():void
+	{
+		const control =<FormArray>this.menuform.controls.menus;
+		control.push(this.initmenu());
+	}
+	removeMenufield(i: number) : void
+	{
+		const control =<FormArray>this.menuform.controls.menus;
+		control.removeAt(i);
+	}
+	manage(val : any) : void
+	{
+		console.dir(val);
+	}
+
 	onModelChange(event){
 		console.log(event);
 	}
-	async addMenuAsync(){
-		let menus = await this._addmenu();
+	async addMenuAsync(data){
+		let menus = await this._addmenu(data);
 		return menus;
 	}
 
-	_addmenu():Promise<any>{
+	_addmenu(data):Promise<any>{
 		return new Promise<any>(resolve => {
 			var success = "success";
+			let menuvalue = data;
+
 			this.date = new Date().toUTCString();
 			// this.id = this.id.toString();
 			var addDoc = this.db.collection('menu').add({
 				// orderDoc_id : this.id,
-				menu : this.menuname,
-				price : this.menuprice,
+				menu : menuvalue.menuName,
+				price : menuvalue.menuPrice,
 				time: this.date,
 				owner_id : firebase.auth().currentUser.email,
 				// store_name:this.store,
@@ -89,9 +124,36 @@ export class CreateMenuPage {
 		});
 		alert.present();
 	}
-	addMenu(){
-		var success  = this.addMenuAsync().then(()=> this.presentAlert()).then(()=>{this.navCtrl.push('page-home');}).catch();
+	presentToast() {
+		// send booking info
+		let loader = this.loadingCtrl.create({
+			content: "Please wait..."
+		});
+		// show message
+		let toast = this.toastCtrl.create({
+			showCloseButton: true,
+			cssClass: 'profiles-bg',
+			message: 'Your menus are registered!',
+			duration: 3000,
+			position: 'bottom'
+		});
 
+		loader.present();
+
+		setTimeout(() => {
+			loader.dismiss();
+			toast.present();
+			// back to home page
+			this.navCtrl.setRoot('page-home');
+		}, 3000)
+	}
+	addMenu(){
+	//	var success  = this.addMenuAsync().then(()=> this.presentAlert()).then(()=>{this.navCtrl.push('page-home');}).catch();
+		for(let i=0; i<this.menuform.controls.menus.value.length;i++ ){
+			console.log("&&&&&", this.menuform.controls.menus.value[i]);
+			var menuadd = this.addMenuAsync(this.menuform.controls.menus.value[i])
+		}
+		return this.presentToast();
 	}
 
   ionViewDidLoad() {

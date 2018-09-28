@@ -5,50 +5,76 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-
-	<ion-navbar>
-		<ion-title>Register Service</ion-title>
+	<ion-navbar  color="primary">
+		<button ion-button menuToggle>
+			<ion-icon name="menu"></ion-icon>
+		</button>
+		<ion-title>
+			<span ion-text>Register Restaurant</span>
+		</ion-title>
 	</ion-navbar>
-
 </ion-header>
 
+<ion-content class="your-restaurant lightest-bg">
 
-<ion-content padding>
-	<ion-list>
-		<ion-item>
-			<ion-label>USER INFO</ion-label>
-			<ion-label color="primary" >{{email}}</ion-label>
-			<!--<ion-label color="primary" >{{time}}</ion-label>-->
-			<!--<ion-label color="primary" >{{menu}}</ion-label>-->
-			<!--<ion-input [(ngModel)]="reviewtext" placeholder="Write Review"></ion-input>-->
-		</ion-item>
-		<ion-item>
-			<ion-label color="primary" fixed>Store Name</ion-label>
-			<ion-input [(ngModel)]="name" placeholder="Write Store Name"></ion-input>
+	<ion-grid no-padding fixed>
+		<ion-row no-padding>
+			<ion-col>
+				<ion-card class="primary-bg">
+					<ion-card-content>
+						<p class="text-white">Complete the form with your restaurant data and register it.</p>
+					</ion-card-content>
+				</ion-card>
 
-		</ion-item>
-		<ion-item>
-			<ion-label color="primary" fixed>Phone</ion-label>
-			<ion-input type="tel" [(ngModel)]="phone" placeholder="Phone number"></ion-input>
+				<ion-card>
+					<ion-card-content>
+						<form [formGroup]="onYourRestaurantForm" class="list-form">
+							<ion-list margin-bottom>
 
-		</ion-item>
+								<ion-item>
+									<ion-label color="primary" stacked>Restaurant title:</ion-label>
+									<ion-input [(ngModel)]="name" type="text" placeholder="Type here..." formControlName="restaurantTitle"></ion-input>
+								</ion-item>
+								<p ion-text color="danger" class="text-1x has-error" *ngIf="onYourRestaurantForm.get('restaurantTitle').touched && onYourRestaurantForm.get('restaurantTitle').hasError('required')">This field is required</p>
 
-		<!--<ion-item>-->
-			<!--<ion-label color="primary" fixed>Location</ion-label>-->
-			<!--<ion-input  [(ngModel)]="location" placeholder="Input Latitude & Longitude"></ion-input>-->
+								<ion-item>
+									<ion-label color="primary" stacked>Restaurant Address:</ion-label>
+									<ion-input [(ngModel)]="address" type="text" placeholder="Type here..." formControlName="restaurantAddress"></ion-input>
+								</ion-item>
+								<p ion-text color="danger" class="text-1x has-error" *ngIf="onYourRestaurantForm.get('restaurantAddress').touched && onYourRestaurantForm.get('restaurantAddress').hasError('required')">This field is required</p>
+								<ion-item>
+									<ion-label color="primary" stacked>Restaurant Phone number:</ion-label>
+									<ion-input [(ngModel)]="phone" type="text" placeholder="Type here...without '-' " formControlName="restaurantPhone"></ion-input>
+								</ion-item>
+								<p ion-text color="danger" class="text-1x has-error" *ngIf="onYourRestaurantForm.get('restaurantAddress').touched && onYourRestaurantForm.get('restaurantPhone').hasError('required')">This field is required</p>
+								<ion-item>
+									<ion-label color="primary" stacked>Restaurant Business Hour:</ion-label>
+									<ion-input [(ngModel)]="business_hours" type="text" placeholder="Type here..." formControlName="restaurantHours"></ion-input>
+								</ion-item>
+								<p ion-text color="danger" class="text-1x has-error" *ngIf="onYourRestaurantForm.get('restaurantAddress').touched && onYourRestaurantForm.get('restaurantHours').hasError('required')">This field is required</p>
 
-		<!--</ion-item>-->
-		<ion-item>
-			<ion-label color="primary" stacked>Address </ion-label>
-			<ion-input  [(ngModel)]="address" value="Address: " placeholder="Input Address"> </ion-input>
+							</ion-list>
 
-		</ion-item>
-		<ion-item>
-			<ion-label color="primary" stacked>Business Hours</ion-label>
-			<ion-input  [(ngModel)]="business_hours" value="Business Hours: "placeholder="Input hours"></ion-input>
+							<button ion-button block color="dark" (click)="RegisterService()" [disabled]="!onYourRestaurantForm.valid">Register</button>
+						</form>
+					</ion-card-content>
+				</ion-card>
 
-		</ion-item>
+			</ion-col>
+		</ion-row>
+	</ion-grid>
 
-	</ion-list>
-	<button ion-button round (click)="RegisterService()">Register Service</button>
+
+
+
 </ion-content>
+
+
+
+
+
+
+
+
+
+

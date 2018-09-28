@@ -1,17 +1,20 @@
 <ion-header margin-bottom="50px" >
 
-	<ion-navbar>
-		<ion-title>Notice List</ion-title>
+	<ion-navbar color="primary">
+		<button ion-button menuToggle>
+			<ion-icon name="menu"></ion-icon>
+		</button>
+		<ion-title>Notice</ion-title>
 	</ion-navbar>
-
 </ion-header >
 
 
-<ion-content margin-top="200px" *ngFor="let review of orders; let id = index">
-	<br><br>
-	<ion-card>
-		<h2 class ="fw700">{{review.store}}</h2>
-		<ion-list class="list-full-border">
+<ion-content margin-top="200px" >
+
+	<ion-list *ngFor="let review of orders; let id = index">
+		<ion-card>
+			<ion-card-content>
+
 			<ion-item  margin-bottom text-wrap>
 
 				<h2 >
@@ -21,10 +24,14 @@
 				<p ion-text>
 					Content : {{ review.content }}
 				</p>
+				<span ion-text class="author text-11x"> WHEN {{ review.timeStamp }}</span>
 			</ion-item>
+			</ion-card-content>
+		</ion-card>
+
 		</ion-list>
 
-	</ion-card>
+
 </ion-content>
 
 <!--<ion-footer class="no-padding dark-bg">-->

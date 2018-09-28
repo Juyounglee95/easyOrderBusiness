@@ -1,18 +1,23 @@
 <ion-header margin-bottom="50px" >
 
-	<ion-navbar>
-		<ion-title>Event List</ion-title>
+	<ion-navbar color="primary">
+		<button ion-button menuToggle>
+			<ion-icon name="menu"></ion-icon>
+		</button>
+		<ion-title>Event</ion-title>
 	</ion-navbar>
 
 </ion-header >
 
 
-<ion-content margin-top="200px" *ngFor="let review of orders; let id = index">
-	<br><br>
+<ion-content margin-top="200px" >
+
 	<ion-card>
-		<h2 class ="fw700">{{review.store}}</h2>
-		<ion-list class="list-full-border">
-			<ion-item  margin-bottom text-wrap>
+		<ion-list class="list-full-border" *ngFor="let review of orders; let id = index">
+			<ion-item >
+		<ion-card-content>
+
+
 
 				<h2 >
 					Title : {{ review.title }}
@@ -21,12 +26,33 @@
 				<p ion-text>
 					Content : {{ review.content }}
 				</p>
-				<button item-right ion-button small (click)="updateOrder(id)" >Edit Event</button>
-				<button item-right ion-button small (click)="presentAlert(id)" >Delete Event</button>
-			</ion-item>
-		</ion-list>
+				<span ion-text class="author text-11x"> WHEN {{ review.timeStamp }}</span>
 
+
+
+		</ion-card-content>
+
+		<ion-row no-padding>
+			<ion-col text-center>
+				<button ion-button clear small color="danger" icon-start (click)="updateOrder(id)">
+					<ion-icon name='color-wand'></ion-icon>
+					Edit Event
+				</button>
+			</ion-col>
+			<ion-col text-center>
+				<button ion-button clear small color="danger" icon-start  (click)="presentAlert(id)">
+					<ion-icon name='trash'></ion-icon>
+					Delete Event
+				</button>
+			</ion-col>
+
+		</ion-row>
+		</ion-item>
+	</ion-list>
 	</ion-card>
+
+
+
 </ion-content>
 
 <ion-footer class="no-padding dark-bg">

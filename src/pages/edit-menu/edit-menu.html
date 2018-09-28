@@ -15,14 +15,30 @@
 	<ion-card>
 		<ion-list class="list-full-border"*ngFor="let menu of menus; let id = index">
       <ion-item>
-				<h2 class ="fw700">{{menu.code}}</h2>
+				<h2 class ="fw700">{{menu.store}}</h2>
 				<!--<ion-label color="primary" >Menu INFO</ion-label>-->
-				<p>
+				<p><strong>Name: </strong>
 					{{ menu.name }}
-					{{ menu.price }}
+
 				</p>
-				<button item-bottom ion-button small (click)="editMenu(id)" >Edit Menu</button>
-				<button item-bottom ion-button small (click)="presentAlert(id)" >Delete Menu</button>
+		  <p> <strong>Price:</strong> ${{menu.price}}</p>
+		  <ion-row no-padding>
+			  <ion-col text-center>
+				  <button ion-button clear small color="danger" icon-start (click)="editMenu(id)">
+					  <ion-icon name='color-wand'></ion-icon>
+					  Edit Menu
+				  </button>
+			  </ion-col>
+			  <ion-col text-center>
+				  <button ion-button clear small color="danger" icon-start  (click)="presentAlert(id)">
+					  <ion-icon name='trash'></ion-icon>
+					  Delete Menu
+				  </button>
+			  </ion-col>
+
+		  </ion-row>
+				<!--<button item-bottom ion-button small (click)="editMenu(id)" >Edit Menu</button>-->
+				<!--<button item-bottom ion-button small (click)="presentAlert(id)" >Delete Menu</button>-->
 			</ion-item>
 		</ion-list>
 

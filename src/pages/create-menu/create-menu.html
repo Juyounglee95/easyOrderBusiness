@@ -9,25 +9,122 @@
 
 </ion-header>
 
-<ion-content>
-	<ion-card-content>
+<ion-content padding>
+	<ion-grid no-padding fixed>
+		<ion-row no-padding>
+			<ion-col>
+				<ion-card class="primary-bg">
+					<ion-card-content>
+						<p class="text-white">Complete the form with your menu data and register it.</p>
+					</ion-card-content>
+				</ion-card>
 
-		<ion-item>
-			<h1 ion-text full large color="dark">Name of the Menu</h1>
-			<ion-input [(ngModel)]="menuname" placeholder="Pizza"></ion-input>
-		</ion-item>
+				<ion-card>
+					<ion-card-content>
+						<form [formGroup]="menuform" (ngSubmit)="addMenu()" class="list-form">
+							<ion-list margin-bottom>
 
-		<ion-item>
-			<h1 ion-text full large color="dark">Price of the Menu</h1>
-			<ion-input [(ngModel)]="menuprice" placeholder="8000"></ion-input>
-		</ion-item>
+								<ion-item>
+									<ion-label color="primary" stacked>Store Code</ion-label>
+									<ion-input [(ngModel)]="storecode" type="text" placeholder="Type here..." formControlName="storecode"></ion-input>
+								</ion-item>
+								<!--<p ion-text color="danger" class="text-1x has-error" *ngIf="menuform.get('storecode').touched && menuform.get('storecode').hasError('required')">This field is required</p>-->
 
-		<ion-item>
-			<h1 ion-text full large color="dark">store_code</h1>
-			<ion-input [(ngModel)]="storecode" placeholder="abc"></ion-input>
-		</ion-item>
+								<div
+									formArrayName="menus"
+									margin-bottom>
+									<section
+											[formGroupName]="i"
+											*ngFor="let menu of menuform.controls.menus.controls; let i = index">
+										<ion-item-group>
+											<ion-item-divider color="light">MENU #{{ i + 1 }}</ion-item-divider>
+											<ion-item>
+												<ion-label color="primary" stacked>Menu Title:</ion-label>
+												<ion-input  type="text" placeholder="Type here..." formControlName="menuName"></ion-input>
+											</ion-item>
+											<!--<p ion-text color="danger" class="text-1x has-error" *ngIf="menuform.get('menuName').touched && menuform.get('menuName').hasError('required')">This field is required</p>-->
+											<ion-item>
+												<ion-label color="primary" stacked>Menu Price:</ion-label>
+												<ion-input type="number" placeholder="Type here...*DO NOT INPUT Currency unit*" formControlName="menuPrice"></ion-input>
+											</ion-item>
+											<!--<p ion-text color="danger" class="text-1x has-error" *ngIf="menuform.get('menuPrice').touched && menuform.get('menuPrice').hasError('required')">This field is required</p>-->
 
-		<button ion-button round (click)="addMenu()">Add menu</button>
 
-	</ion-card-content>
+
+											<!-- Allow generated input field to be removed -->
+											<span
+													float-right
+													ion-button
+													icon-left
+													clear
+													*ngIf="menuform.controls.menus.length > 1"
+													(click)="removeMenufield(i)">
+											 <ion-icon name="close"></ion-icon>
+											 Remove
+										  </span>
+										</ion-item-group>
+									</section>
+
+
+
+								</div>
+
+								<span
+										ion-button
+										float-left
+										icon-left
+										clear
+										(click)="addNewMenufield()">
+									   <ion-icon name="add"></ion-icon>
+									   Add a new menu
+								 </span>
+							</ion-list>
+							<button
+									ion-button
+									block
+									margin-top
+									color="primary"
+									text-center
+
+									[disabled]="!menuform.valid"
+									>Submit</button>
+
+
+						</form>
+					</ion-card-content>
+
+
+
+				</ion-card>
+
+			</ion-col>
+		</ion-row>
+	</ion-grid>
+
 </ion-content>
+
+
+
+
+
+	<!--<ion-card-content>-->
+
+		<!--<ion-item>-->
+			<!--<h1 ion-text full large color="dark">Name of the Menu</h1>-->
+			<!--<ion-input [(ngModel)]="menuname" placeholder="Pizza"></ion-input>-->
+		<!--</ion-item>-->
+
+		<!--<ion-item>-->
+			<!--<h1 ion-text full large color="dark">Price of the Menu</h1>-->
+			<!--<ion-input [(ngModel)]="menuprice" placeholder="8000"></ion-input>-->
+		<!--</ion-item>-->
+
+		<!--<ion-item>-->
+			<!--<h1 ion-text full large color="dark">store_code</h1>-->
+			<!--<ion-input [(ngModel)]="storecode" placeholder="abc"></ion-input>-->
+		<!--</ion-item>-->
+
+		<!--<button ion-button round (click)="addMenu()">Add menu</button>-->
+
+	<!--</ion-card-content>-->
+<!--</ion-content>-->
