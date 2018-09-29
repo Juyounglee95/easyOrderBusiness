@@ -122,7 +122,7 @@ export class foodIonicApp {
         this.helpMenuItems = [
             {title: 'About', component: 'page-about', icon: 'information-circle'},
             {title: 'Support', component: 'page-support', icon: 'call'},
-            {title: 'App Settings', component: 'page-settings', icon: 'cog'},
+            // {title: 'App Settings', component: 'page-settings', icon: 'cog'},
             // {title: 'Walkthrough', component: 'page-walkthrough', icon: 'photos'}
         ];
 

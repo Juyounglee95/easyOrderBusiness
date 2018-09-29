@@ -37,6 +37,7 @@ export class RestaurantListPage {
 	names:string='';
 	date:string='';
 	num2:number=0;
+	user:string='';
 
 	restaurants: Array<any>;
 	searchKey: string = "";
@@ -74,7 +75,6 @@ export class RestaurantListPage {
 	}
 	start(){
 		var abc =this.startAsync().then(num2 => {
-			console.log(num2);
 			this.waitingNumber = num2});
 	}
 	async startAsync(){
@@ -96,6 +96,7 @@ export class RestaurantListPage {
 				this.num2=num;
 				var wait = this.waitAsync(this.num2).then(wm => {
 					this.waitingNumber=wm;
+					this.notification();
 				})
 			});
 		}
@@ -110,16 +111,31 @@ export class RestaurantListPage {
 			this.db.collection(this.store).get().then(function(querySnapshot) {
 				querySnapshot.forEach(doc => {
 					console.log(doc.data().order)
-					if(wm>doc.data().order){
 						wm = doc.data().order;
-					}else if(doc.data().order==null){
-						wm = 0;
-					}
 				});
-
+				resolve(wm);
 			});
-			resolve(wm);
 		});
+	}
+	notification(){
+		let body = {
+			"notification": {
+				"title": "Waiting is done! Come to the restaurant!",
+				"body": "Waiting is done! Come to the restaurant!",
+				"sound": "default",
+				"click_action": "FCM_PLUGIN_ACTIVITY",
+				"icon": "fcm_push_icon"
+			},
+			"data": {},
+			"to": "/topics/" + this.user.replace('@','').replace('.',''),
+			"priority": "high",
+			"restricted_package_name": ""
+		}
+		let options = new HttpHeaders().set('Content-Type', 'application/json');
+		this.http.post("https://fcm.googleapis.com/fcm/send", body, {
+			headers: options.set('Authorization', 'key=AAAA94sqthU:APA91bHr4vPUOBDnGep_qDQu6Ig0UHad3QzYBm48v_BHd76kgvIeN7LpPNzztnoy1cLhpNq3D9gDqoKjRqSt1hbVn_BGVBWdsreoo_bikkczQxJSLPSArC3dwLQfpbeZSGfC0xexfDAQ'),
+		})
+			.subscribe();
 	}
 	async waitAsync(num : number){
 		let wait = await this._wait(num);
@@ -132,30 +148,11 @@ export class RestaurantListPage {
 					querySnapshot.docChanges.forEach(change => {
 						const fooId = change.doc.id
 						const fooUser = change.doc.data().user
+						this.user=fooUser;
 						this.db.collection(this.store).doc(fooId).delete().then(success => {
-							let body = {
-								"notification": {
-									"title": "Waiting is done! Come to the restaurant!",
-									"body": "Waiting is done! Come to the restaurant!",
-									"sound": "default",
-									"click_action": "FCM_PLUGIN_ACTIVITY",
-									"icon": "fcm_push_icon"
-								},
-								"data": {},
-								"to": "/topics/" + fooUser,
-								"priority": "high",
-								"restricted_package_name": ""
-							}
-							let options = new HttpHeaders().set('Content-Type', 'application/json');
-							this.http.post("https://fcm.googleapis.com/fcm/send", body, {
-								headers: options.set('Authorization', 'key=AAAA94sqthU:APA91bHKb0t-b2rI3Z5OGu8fIYiOUmtOD--7gj4lBX5y7l8N418XFG3Qjmjo5UWU5kq1-kriF6S6A2smWcacheDof_vfqrw-jM_5DzSWhNEEkM4iX4LbyNelSefU8SyQEVpZJj_cid3t'),
-							})
-								.subscribe();
-						}).then(()=>{
 							let wm = this.waitingNumber-1;
 							resolve(wm);
 						});
-						// do something with foo and fooId
 					});
 				}else{
 					resolve(this.waitingNumber);
