@@ -81,7 +81,7 @@ export class EventPage {
 		var reviewRef = this.db.collection('event').where("timeStamp", "==", orderdoc_id).onSnapshot(querySnapshot => {
 			querySnapshot.docChanges.forEach(change => {
 				const reviewid = change.doc.id;
-				this.db.collection('event').doc(reviewid).delete().then(()=>this.presentAlert2()).then(()=>this.navCtrl.push('page-home')).catch(err=> console.log("error"));
+				this.db.collection('event').doc(reviewid).delete().then(()=>this.presentAlert2()).then(()=>this.navCtrl.setRoot('page-home')).catch(err=> console.log("error"));
 				// do something with foo and fooId
 				//resolve();
 			})
@@ -89,12 +89,12 @@ export class EventPage {
 	}
 	updateOrder(id) {
 		var orderdoc_id = this.orders[id].timeStamp;
-		this.navCtrl.push('page-nearyby', {'content':this.orders[id].content, 'title':this.orders[id].title, 'timeStamp':orderdoc_id});
+		this.navCtrl.push('page-nearby', {'content':this.orders[id].content, 'title':this.orders[id].title, 'timeStamp':orderdoc_id});
 	}
 	presentAlert2() {
 
 		let alert = this.alert.create({
-			title: "Deleted Event",
+			title: "Deletion is completed",
 			buttons: ["OK"]
 		});
 		alert.present();

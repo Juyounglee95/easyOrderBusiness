@@ -83,7 +83,7 @@ export class CartPage {
 		var reviewRef = this.db.collection('event').where("timeStamp", "==", orderdoc_id).onSnapshot(querySnapshot => {
 			querySnapshot.docChanges.forEach(change => {
 				const reviewid = change.doc.id;
-				this.db.collection('event').doc(reviewid).delete().then(()=>this.presentAlert2()).then(()=>this.navCtrl.push('page-home')).catch(err=> console.log("error"));
+				this.db.collection('event').doc(reviewid).delete().then(()=>this.presentAlert2()).then(()=>this.navCtrl.setRoot('page-home')).catch(err=> console.log("error"));
 				// do something with foo and fooId
 				//resolve();
 			})
