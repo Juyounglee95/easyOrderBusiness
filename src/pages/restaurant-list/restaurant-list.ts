@@ -96,7 +96,6 @@ export class RestaurantListPage {
 				this.num2=num;
 				var wait = this.waitAsync(this.num2).then(wm => {
 					this.waitingNumber=wm;
-					this.notification();
 				})
 			});
 		}
@@ -151,6 +150,8 @@ export class RestaurantListPage {
 						this.user=fooUser;
 						this.db.collection(this.store).doc(fooId).delete().then(success => {
 							let wm = this.waitingNumber-1;
+							this.waitingNumber=this.waitingNumber-1;
+							this.notification();
 							resolve(wm);
 						});
 					});
