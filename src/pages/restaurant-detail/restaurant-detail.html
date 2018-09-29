@@ -39,7 +39,7 @@
 
 								<ion-item>
 									<ion-label color="primary" stacked>Event Content:</ion-label>
-									<ion-input [(ngModel)]="noticeContent" type="text" placeholder="Type here..." formControlName="restaurantAddress"></ion-input>
+									<ion-textarea rows="13" [(ngModel)]="noticeContent" type="text" placeholder="Type here..." formControlName="restaurantAddress"></ion-textarea>>
 								</ion-item>
 								<p ion-text color="danger" class="text-1x has-error" *ngIf="onYourRestaurantForm.get('restaurantAddress').touched && onYourRestaurantForm.get('restaurantAddress').hasError('required')">This field is required</p>
 
