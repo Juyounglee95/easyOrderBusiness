@@ -73,7 +73,7 @@ export class HomePage {
 		// this.findAll();
 
 	this.getregister();
-	 this.initializeApp();
+	// this.initializeApp();
 
 
 	  // this.platform.ready().then(() => {
@@ -166,7 +166,19 @@ export class HomePage {
 
 	getregister(){
   	this.platform.ready().then(()=>{
-		var res = this.resAsync().then(status=> this.status = status)})
+		var res = this.resAsync().then(status=> this.status = status).then(()=>
+
+			{
+				if(this.status=='2'){
+					this.order()
+				}
+			}
+		)
+
+
+
+
+  	})
   }
 	  async  resAsync(){
 		  let val = await this._res();
@@ -202,15 +214,17 @@ export class HomePage {
   register_service(){
 	  this.navCtrl.push('page-register-service', {email : this.email});
   }
-	initializeApp() {
-		this.platform.ready().then(() => {
-			if(this.status=='2') {
+	order() {
+
+			console.log("what the status", this.status);
+
+				console.log("status22222")
 				var store_a = this.storeAsync().then(store_a => this.store = store_a).then(() => {
 					this.getOrder();
 				})
-			}
 
-		});
+
+
     //
 	}
 	async  storeAsync(){
