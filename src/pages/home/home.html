@@ -6,14 +6,7 @@
     <ion-title>
       <span ion-text class="fw700">Easy</span><span ion-text class="fw300">OrderBusiness</span>
     </ion-title>
-    <ion-buttons end>
-      <button ion-button (click)="presentNotifications($event)">
-        <ion-icon name="notifications"></ion-icon>
-      </button>
-      <button ion-button (click)="openCart()">
-        <ion-icon name="cart"></ion-icon>
-      </button>
-    </ion-buttons>
+
   </ion-navbar>
 
   <!--<ion-toolbar color="primary">-->
@@ -38,53 +31,69 @@
 					</div>
 
 
-
-
-
-
-				<!--<ion-card *ngIf="!orders.length" class="primary-bg" margin-top>-->
-				<!--<ion-card-content>-->
-				<!--<p text-center class="text-white">You still haven't any item.</p>-->
-				<!--</ion-card-content>-->
-				<!--</ion-card>-->
-
 				<ion-list no-margin *ngIf="status=='2'">
-					<h2 ion-text color="dark" class="fw700">Order List</h2>
-					<ion-item-sliding *ngFor="let Order of orders; let id = index">
-						<div ion-item >
-							<!--<ion-thumbnail item-left>-->
-							<!--<img src="{{order.order.picture}}"/>-->
-							<!--</ion-thumbnail>-->
+					<h2 ion-text color="dark" text-center> <strong>Order List</strong></h2>
+					<ion-grid class="text-center" no-padding>
+						<ion-row>
+							<ion-col class="text-center">
+								<ion-card *ngIf="!orders.length" class="primary-bg" margin-top>
+									<ion-card-content>
+										<p text-center class="text-white">You have no orders.</p>
+									</ion-card-content>
+								</ion-card>
 
-							<!--<h2 ion-text color="dark" class="fw700">{{menu.price}}</h2>-->
-							<ion-grid class="filters" no-padding>
-								<ion-row>
-									<ion-col>
-										<!--[hidden]="order.qtd < 2"-->
-										<h2 ion-text color="dark" class="fw700">Table num : {{Order.tableNum}}</h2>
-									<h4 ion-text color="dark" class="fw700">
-										Date : {{Order.timeStamp}}<br/>
-										Order : {{Order.menu}}<br/>
-										Total Price : {{Order.totalPrice}}</h4>
-										<!--<button ion-button color="danger" (click)="minusQtd()">MINUS</button>-->
-									</ion-col>
-									<ion-col item-right>
-										<button ion-button color="danger" (click)="confirm(id)" [hidden]="!Order.status">Confirm</button>
-										<!--<h2 ion-text color="primary" class="text-18x">-->
-										<!--<span>{{ order.qtd }}</span>-->
-										<!--</h2>-->
-									</ion-col>
-								</ion-row>
-							</ion-grid>
+								<ion-card *ngFor="let Order of orders; let id = index">
+									<ion-card-header text-center class="primary-bg">
+										<p ion-text class="text-18x text-light fw300">Table number: <span ion-text class="fw700 text-white">{{Order.tableNum}}</span></p>
+									</ion-card-header>
+									<ion-card-content no-padding>
+
+										<!--<ion-list  no-margin>-->
+											<div ion-item >
+												<h2 ion-text color="dark" class="fw700"><strong>MENU: </strong>{{Order.menu}}</h2>
+
+												<p ion-text color="primary"> <span class="fw700">{{Order.timeStamp}}</span></p>
+
+												<ion-badge color="primary">{{ Order.totalPrice | currency }}</ion-badge>
+
+											</div>
+										<!--</ion-list>-->
+									</ion-card-content>
+									<ion-row>
+										<ion-col text-center>
+									<button ion-button [style.backgroundColor]="Order.buttonColor" [disabled]="Order.disableButton" ion-button full (click)="confirm(id)"  >CONFIRM</button>
+										</ion-col>
+									</ion-row>
+									<!--<ion-card-content [hidden]="!Order.status">-->
+										<!--<ion-grid padding >-->
+											<!--<ion-row>-->
+												<!--<ion-col>-->
+													<!--<ion-card class="green-bg full-width" no-margin text-center (click)="confirm(id)" >-->
+														<!--<ion-card-content>-->
+
+															<!--<h2 ion-text no-margin class="fw700 text-white">Confirm</h2>-->
+														<!--</ion-card-content>-->
+													<!--</ion-card>-->
+												<!--</ion-col>-->
+											<!--</ion-row>-->
+										<!--</ion-grid>-->
+									<!--</ion-card-content>-->
+
+								</ion-card>
+
+
+
+							</ion-col>
+						</ion-row>
+					</ion-grid>
 							<!--<div item-right>-->
 							<!--<ion-badge>{{ order.order.price * order.qtd | currency }}</ion-badge>-->
 							<!--</div>-->
-						</div>
+
 						<!--<ion-item-options>-->
 						<!--<button ion-button color="danger" (click)="removeOrder(order)">Delete</button>-->
 						<!--</ion-item-options>-->
 
-					</ion-item-sliding>
 					<!--<ion-card-content>-->
 
 						<!--<h1 ion-text full large color="dark">Total Order Value</h1>-->

@@ -11,9 +11,9 @@
 
 
 <ion-content margin-top="200px" >
-
+	<ion-list class="list-full-border" *ngFor="let review of orders; let id = index">
 	<ion-card>
-		<ion-list class="list-full-border" *ngFor="let review of orders; let id = index">
+
 			<ion-item >
 		<ion-card-content>
 
@@ -48,11 +48,11 @@
 
 		</ion-row>
 		</ion-item>
-	</ion-list>
+
 	</ion-card>
 
 
-
+	</ion-list>
 </ion-content>
 
 <ion-footer class="no-padding dark-bg">

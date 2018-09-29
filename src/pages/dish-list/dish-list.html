@@ -16,14 +16,16 @@
 
 
 
-<ion-content margin-top="200px" *ngFor="let review of reviews; let id = index">
-	<br><br>
+<ion-content margin-top="200px" >
+	<ion-list class="list-full-border"*ngFor="let review of reviews; let id = index">
 	<ion-card>
-		<h2 class ="fw700">{{review.user_name}}</h2>
-		<ion-list class="list-full-border">
-			<ion-item  margin-bottom text-wrap>
 
+
+			<!--<ion-item  >-->
+				<ion-card-content>
+				<!--<h2 class ="fw700">{{review.user_id}}</h2>-->
 				<h2 class="fw700">
+
 					<ion-badge color="secondary" class="text-1x">
 						<ion-icon name="star"></ion-icon>
 						{{ review.star }}
@@ -33,11 +35,16 @@
 				<p ion-text>
 					{{ review.content }}
 				</p>
-				<span ion-text class="author text-11x">{{ review.menu }} WHEN {{ review.time }}</span>
-				<!--<button item-right ion-button small (click)="editReview()" >Edit Review</button>-->
-				<!--<button item-right ion-button small (click)="presentAlert()" >Delete Review</button>-->
-			</ion-item>
-		</ion-list>
+					<span ion-text class="author text-11x">Customer ID: {{review.user_id}}</span>
+					<br>
+					<span ion-text class="author text-11x">Ordered Menu: {{ review.menu }}</span>
+					<br>
+					<span ion-text class="author text-11x">WHEN {{ review.time }}</span>
+
+				</ion-card-content>
+			<!--</ion-item>-->
+
 
 	</ion-card>
+	</ion-list>
 </ion-content>

@@ -1,6 +1,15 @@
 import {Component} from '@angular/core';
-import {IonicPage, NavController, ModalController, NavParams, AlertController} from 'ionic-angular';
+import {
+	IonicPage,
+	NavController,
+	ModalController,
+	NavParams,
+	AlertController,
+	LoadingController,
+	ToastController
+} from 'ionic-angular';
 import {RestaurantService} from '../../providers/restaurant-service-mock';
+import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 
 import leaflet from 'leaflet';
 import * as firebase from "firebase";
@@ -24,13 +33,62 @@ export class NearbyPage {
 	orders: Array<any> = [];
 	public noticeCollection: any;
 	public  db = firebase.firestore();
-
-	constructor(public navCtrl: NavController, private alertCtrl: AlertController,public service: RestaurantService, public navParams: NavParams) {
+	public onYourRestaurantForm: FormGroup;
+	constructor(public loadingCtrl: LoadingController, public toastCtrl: ToastController, private _fb: FormBuilder,public navCtrl: NavController, private alertCtrl: AlertController,public service: RestaurantService, public navParams: NavParams) {
 		this.noticeTitle= this.navParams.get("title");
 		this.noticeContent= this.navParams.get("content");
 		this.timeStamp=this.navParams.get('timeStamp');
 		console.log(this.timeStamp)
 	}
+
+	ngOnInit() {
+		this.onYourRestaurantForm = this._fb.group({
+
+			restaurantTitle: ['', Validators.compose([
+				Validators.required
+			])],
+			restaurantAddress: ['', Validators.compose([
+				Validators.required
+			])],
+
+		});
+	}
+	presentToast() {
+		// send booking info
+		let loader = this.loadingCtrl.create({
+			content: "Please wait..."
+		});
+		// show message
+		let toast = this.toastCtrl.create({
+			showCloseButton: true,
+			cssClass: 'profiles-bg',
+			message: 'Your Event was changed!',
+			duration: 3000,
+			position: 'bottom'
+		});
+
+		loader.present();
+
+		setTimeout(() => {
+			loader.dismiss();
+			toast.present();
+			// back to home page
+			this.navCtrl.setRoot('page-home');
+		}, 3000)
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	presentAlert() {
 
@@ -41,7 +99,7 @@ export class NearbyPage {
 		alert.present();
 	}
 	addReview(){
-		var success  = this.editReviewAsync().then(()=> this.presentAlert()).then(()=>{this.navCtrl.push('page-home');}).catch();
+		var success  = this.editReviewAsync().then(()=> this.presentToast()).catch();
 		//console.log("result:",success);
 	}
 

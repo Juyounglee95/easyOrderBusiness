@@ -89,7 +89,7 @@ export class EventPage {
 	}
 	updateOrder(id) {
 		var orderdoc_id = this.orders[id].timeStamp;
-		this.navCtrl.push('page-nearyby', {'content':this.orders[id].content, 'title':this.orders[id].title, 'timeStamp':orderdoc_id});
+		this.navCtrl.push('page-nearby', {'content':this.orders[id].content, 'title':this.orders[id].title, 'timeStamp':orderdoc_id});
 	}
 	presentAlert2() {
 

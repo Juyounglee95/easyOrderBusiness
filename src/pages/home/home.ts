@@ -58,6 +58,8 @@ export class HomePage {
 	public orderCollection: any;
 	public  db = firebase.firestore();
 	status = '0';
+	//private buttonColor: string = "primary";
+	//private disableButton =false;
   constructor(public iamport: IamportService, private theInnAppBrowser : InAppBrowser,public http: HttpClient, public navCtrl: NavController, public platform : Platform,private fcm: FCM,public menuCtrl: MenuController, public popoverCtrl: PopoverController, public locationCtrl: AlertController, public modalCtrl: ModalController, public toastCtrl: ToastController, public service: RestaurantService) {
 		this.menuCtrl.swipeEnable(true, 'authenticated');
 		this.menuCtrl.enable(true);
@@ -263,10 +265,18 @@ export class HomePage {
 			console.log(this.store);
 			var orderRef = this.orderCollection.where("store_code", "==", this.store[0]);
 			console.log(orderRef)
+			var button_col = "primary"
+			var disablebtn= false;
 			var orderInfo = orderRef.get()
 				.then(snapshot => {
 					snapshot.forEach(doc => {
-
+						if(doc.data().status==false){
+							button_col="light"
+							disablebtn= true;
+						}else{
+							button_col ="primary"
+							disablebtn = false;
+						}
 						order.push({
 							menu : doc.data().menu,
 							totalPrice : doc.data().totalprice,
@@ -274,7 +284,9 @@ export class HomePage {
 							tableNum : doc.data().table_num,
 							timeStamp : doc.data().timestamp,
 							user : doc.data().user,
-							store_code:doc.data().store_code
+							store_code:doc.data().store_code,
+							buttonColor :button_col,
+							disableButton : disablebtn
 						});
 					});
 					console.log("####", order);
@@ -288,13 +300,16 @@ export class HomePage {
 
 	confirm(index : any){
   	this.orders[index].status=false;
+  	this.orders[index].buttonColor = "light";
+		this.orders[index].disableButton = true;
 	var orderRef = this.orderCollection.where("timestamp", "==", this.orders[index].timeStamp).onSnapshot(querySnapshot => {
 		querySnapshot.docChanges.forEach(change => {
-			if (change.type === 'added' && change.doc._document.hasLocalMutations) {
+			//if (change.type === 'added' && change.doc._document.hasLocalMutations) {
 				const fooId = change.doc.id
 				this.orderCollection.doc(fooId).update({status : false});
+
 				// do something with foo and fooId
-			}
+			//}
 		})
 	});
 	// console.log(orderRef);
