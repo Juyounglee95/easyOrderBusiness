@@ -12,44 +12,42 @@
 
 <ion-content margin-top="200px" >
 	<ion-list class="list-full-border" *ngFor="let review of orders; let id = index">
-	<ion-card>
 
-			<ion-item >
-		<ion-card-content>
+		<ion-card >
+			<ion-card-header text-center class="primary-bg">
+				<p ion-text class="text-18x text-white fw300"><strong>{{ review.title }}</strong> </p>
+			</ion-card-header>
+			<ion-card-content no-padding>
 
+				<!--<ion-list  no-margin>-->
+				<div ion-item >
+					<h2 ion-text color="dark" class="fw700">{{ review.content }}</h2>
+					<br>
+					<span ion-text class="author text-11x"> WHEN {{ review.timeStamp }}</span>
+					<!--<p ion-text color="primary"> <span class="fw700">{{Order.timeStamp}}</span></p>-->
 
+					<!--<ion-badge color="primary">{{ Order.totalPrice | currency }}</ion-badge>-->
 
-				<h2 >
-					Title : {{ review.title }}
-				</h2>
+				</div>
+				<!--</ion-list>-->
+			</ion-card-content>
 
-				<p ion-text>
-					Content : {{ review.content }}
-				</p>
-				<span ion-text class="author text-11x"> WHEN {{ review.timeStamp }}</span>
+			<ion-row no-padding>
+				<ion-col text-center>
+					<button ion-button clear small color="danger" icon-start (click)="updateOrder(id)">
+						<ion-icon name='color-wand'></ion-icon>
+						Edit
+					</button>
+				</ion-col>
+				<ion-col text-center>
+					<button ion-button clear small color="danger" icon-start  (click)="presentAlert(id)">
+						<ion-icon name='trash'></ion-icon>
+						Delete
+					</button>
+				</ion-col>
 
-
-
-		</ion-card-content>
-
-		<ion-row no-padding>
-			<ion-col text-center>
-				<button ion-button clear small color="danger" icon-start (click)="updateOrder(id)">
-					<ion-icon name='color-wand'></ion-icon>
-					Edit
-				</button>
-			</ion-col>
-			<ion-col text-center>
-				<button ion-button clear small color="danger" icon-start  (click)="presentAlert(id)">
-					<ion-icon name='trash'></ion-icon>
-					Delete
-				</button>
-			</ion-col>
-
-		</ion-row>
-		</ion-item>
-
-	</ion-card>
+			</ion-row>
+		</ion-card>
 
 
 	</ion-list>
