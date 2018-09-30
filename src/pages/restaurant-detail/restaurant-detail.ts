@@ -29,9 +29,17 @@ export class RestaurantDetailPage {
 	public  db = firebase.firestore();
 	date : any;
 	public onYourRestaurantForm: FormGroup;
+	email: string;
 	constructor(public loadingCtrl: LoadingController, public toastCtrl: ToastController, private _fb: FormBuilder,public navCtrl: NavController, public service: RestaurantService, private alertCtrl: AlertController) {
 		// this.getFavorites();
 		// console.log(this.favorites);
+		firebase.auth().onAuthStateChanged((user)=> {
+			if (user) {
+				this.email = user.email;
+				console.log("%%email", this.email);
+			} else {
+			}
+		});
 	}
 	ngOnInit() {
 		this.onYourRestaurantForm = this._fb.group({
@@ -85,7 +93,8 @@ export class RestaurantDetailPage {
 			var addDoc = this.db.collection('event').add({
 				title : this.noticeTitle,
 				content : this.noticeContent,
-				timeStamp: this.date
+				timeStamp: this.date,
+				owner: this.email
 			}).then(ref=>{
 				resolve(success);
 				console.log('Added document');

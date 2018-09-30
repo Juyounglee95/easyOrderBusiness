@@ -19,9 +19,17 @@ export class EventPage {
 	public  db = firebase.firestore();
 	title:any;
 	content:any;
-
+	email : any;
+	sameowner : true;
 	constructor(public navCtrl: NavController, public navParams: NavParams, public alert:AlertController) {
 		this.getOrders();
+		firebase.auth().onAuthStateChanged((user)=> {
+			if (user) {
+				this.email = user.email;
+				console.log("%%email", this.email);
+			} else {
+			}
+		});
 	}
 
 	getOrders(){
@@ -36,14 +44,20 @@ export class EventPage {
 	_order():Promise<any>{
 		return new Promise<any>(resolve => {
 			var order: Array<any>=[];
+
 			this.noticeCollection = this.db.collection("event");
 			var orderInfo = this.noticeCollection.get()
 				.then(snapshot => {
 					snapshot.forEach(doc => {
+						var same = false;
+						if(this.email== doc.data().owner){
+							same = true;
+						}
 						order.push({
 							title : doc.data().title,
 							timeStamp : doc.data().timeStamp,
-							content : doc.data().content
+							content : doc.data().content,
+							valid : same
 						});
 					});
 					console.log("####", order);

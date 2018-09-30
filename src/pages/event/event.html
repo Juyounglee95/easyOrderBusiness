@@ -38,13 +38,13 @@
 			<hr>
 			<ion-row no-padding>
 				<ion-col text-center>
-					<button ion-button clear small color="danger" icon-start (click)="updateOrder(id)">
+					<button ion-button clear small color="danger" icon-start [hidden]="!review.valid" (click)="updateOrder(id)">
 						<ion-icon name='color-wand'></ion-icon>
 						Edit
 					</button>
 				</ion-col>
 				<ion-col text-center>
-					<button ion-button clear small color="danger" icon-start  (click)="presentAlert(id)">
+					<button ion-button clear small color="danger" icon-start [hidden]="!review.valid" (click)="presentAlert(id)">
 						<ion-icon name='trash'></ion-icon>
 						Delete
 					</button>
