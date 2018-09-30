@@ -83,12 +83,13 @@ export class CreateMenuPage {
 			var addDoc = this.db.collection('menu').add({
 				// orderDoc_id : this.id,
 				menu : menuvalue.menuName,
-				price : menuvalue.menuPrice,
+				price : parseInt(menuvalue.menuPrice),
 				time: this.date,
 				owner_id : firebase.auth().currentUser.email,
 				// store_name:this.store,
 				store_code : this.storecode,
-				id:""
+				id:"",
+				status :0
 			}).then(function(docRef) {
 
 				console.log("Document written with ID: ", docRef.id);

@@ -1,5 +1,5 @@
 import {Component} from "@angular/core";
-import {IonicPage, NavController, ViewController} from "ionic-angular";
+import {IonicPage, NavController, ViewController, NavParams} from "ionic-angular";
 
 @IonicPage({
 	name: 'page-notifications'
@@ -11,9 +11,16 @@ import {IonicPage, NavController, ViewController} from "ionic-angular";
 })
 
 export class NotificationsPage {
-  constructor(public navCtrl: NavController, public viewCtrl: ViewController) {}
+	content: any;
+	title: any;
+	timeStamp: any;
+  constructor(public navParams: NavParams,public navCtrl: NavController, public viewCtrl: ViewController) {
+	  this.content= this.navParams.get("content");
+	  this.title = this.navParams.get("title");
+	  this.timeStamp = this.navParams.get("timeStamp");
+  }
 
-  close() {
+	  close() {
     this.viewCtrl.dismiss();
   }
 

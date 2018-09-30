@@ -1,25 +1,45 @@
 <ion-header>
-
-	<ion-navbar>
-		<ion-title>Event</ion-title>
+	<ion-navbar color="primary">
+		<button ion-button menuToggle>
+			<ion-icon name="menu"></ion-icon>
+		</button>
+		<ion-title>
+			<span ion-text class="fw700">Event Detail</span>
+		</ion-title>
 	</ion-navbar>
-
 </ion-header>
 
 
-<ion-content padding>
-	<ion-list>
-		<ion-item>
-			<ion-label color="primary" >Title</ion-label>
+<ion-content class="lightest-bg">
+	<ion-card  class="full-width" no-margin>
+		<!-- <img src="{{restaurant.picture}}"> -->
+		<ion-card-content>
+			<h1 ion-text color="dark" class="card-title fw700" text-center>
+				{{title}}
+			</h1>
 
-			<ion-input [(ngModel)]="noticeTitle" placeholder="Write Event"></ion-input>
-		</ion-item>
-		<ion-item>
-			<ion-label color="primary" >Content</ion-label>
+		</ion-card-content>
 
-			<ion-input [(ngModel)]="noticeContent" placeholder="Write Event"></ion-input>
-		</ion-item>
+		<ion-grid no-padding fixed>
+			<ion-row no-padding>
+				<ion-col>
 
-	</ion-list>
-	<button ion-button round (click)="addReview()">Edit Event</button>
+					<div  padding>
+
+
+						<hr>
+
+						<p ion-text margin-bottom>{{content}}</p>
+						<hr>
+						<span ion-text class="author text-11x">WHEN {{ timeStamp}}</span>
+
+						<br><br>
+
+					</div>
+				</ion-col>
+			</ion-row>
+		</ion-grid>
+
+	</ion-card>
+
 </ion-content>

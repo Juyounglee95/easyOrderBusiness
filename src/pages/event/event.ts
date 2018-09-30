@@ -103,5 +103,9 @@ export class EventPage {
 	openCategoryPage() {
 		this.navCtrl.push('page-restaurant-detail');
 	}
+	readmore(id){
+		this.navCtrl.push('page-checkout', {'content': this.orders[id].content,'title':this.orders[id].title, 'timeStamp':this.orders[id].timeStamp
+		});
+	}
 
 }

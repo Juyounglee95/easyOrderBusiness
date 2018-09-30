@@ -29,9 +29,13 @@
 					<!--<ion-badge color="primary">{{ Order.totalPrice | currency }}</ion-badge>-->
 
 				</div>
+				<button  ion-button clear small color="danger" icon-start (click)="readmore(id)" >
+					<ion-icon name='add'></ion-icon>
+					Read more
+				</button>
 				<!--</ion-list>-->
 			</ion-card-content>
-
+			<hr>
 			<ion-row no-padding>
 				<ion-col text-center>
 					<button ion-button clear small color="danger" icon-start (click)="updateOrder(id)">
