@@ -1,22 +1,22 @@
 <ion-header>
-  <ion-navbar color="primary">
-    <button ion-button menuToggle>
-      <ion-icon name="menu"></ion-icon>
-    </button>
-    <ion-title>
-      <span ion-text class="fw700">Easy</span><span ion-text class="fw300">OrderBusiness</span>
-    </ion-title>
+	<ion-navbar color="primary">
+		<button ion-button menuToggle>
+			<ion-icon name="menu"></ion-icon>
+		</button>
+		<ion-title>
+			<span ion-text class="fw700">Easy</span><span ion-text class="fw300">OrderBusiness</span>
+		</ion-title>
 
-  </ion-navbar>
+	</ion-navbar>
 
-  <!--<ion-toolbar color="primary">-->
-    <!--<ion-searchbar [(ngModel)]="searchKey" (ionInput)="onInput($event)" (ionCancel)="onCancel($event)"></ion-searchbar>-->
-    <!--<ion-buttons end>-->
-      <!--<button ion-button (click)="openRestaurantFilterPage()">-->
-        <!--<ion-icon name="options"></ion-icon>-->
-      <!--</button>-->
-    <!--</ion-buttons>-->
-  <!--</ion-toolbar>-->
+	<!--<ion-toolbar color="primary">-->
+	<!--<ion-searchbar [(ngModel)]="searchKey" (ionInput)="onInput($event)" (ionCancel)="onCancel($event)"></ion-searchbar>-->
+	<!--<ion-buttons end>-->
+	<!--<button ion-button (click)="openRestaurantFilterPage()">-->
+	<!--<ion-icon name="options"></ion-icon>-->
+	<!--</button>-->
+	<!--</ion-buttons>-->
+	<!--</ion-toolbar>-->
 </ion-header>
 
 <ion-content class="lightest-bg">
@@ -24,11 +24,11 @@
 	<ion-grid no-padding fixed >
 		<ion-row no-padding>
 			<ion-col class="text-center">
-					<div text-center>
+				<div text-center>
 					<img margin-top="30px" *ngIf="status=='0'||status=='1'" class="full-image"src="assets/img/easyorder소개.png"/>
-						<button ion-button round *ngIf="status=='0'" (click)="register_service()">Register Service</button>
-						<button ion-button round *ngIf="status=='1'" (click)="pay()">Pay for Service</button>
-					</div>
+					<button ion-button round *ngIf="status=='0'" (click)="register_service()">Register Service</button>
+					<button ion-button round *ngIf="status=='1'" (click)="pay()">Pay for Service</button>
+				</div>
 
 
 				<ion-list no-margin *ngIf="status=='2'">
@@ -47,67 +47,25 @@
 										<p ion-text class="text-18x text-light fw300">Table number: <span ion-text class="fw700 text-white">{{Order.tableNum}}</span></p>
 									</ion-card-header>
 									<ion-card-content no-padding>
-
-										<!--<ion-list  no-margin>-->
-											<div ion-item >
-												<h2 ion-text color="dark" class="fw700"><strong>MENU: </strong>{{Order.menu}}</h2>
-
-												<p ion-text color="primary"> <span class="fw700">{{Order.timeStamp}}</span></p>
-
-												<ion-badge color="primary">{{ Order.totalPrice | currency }}</ion-badge>
-
-											</div>
-										<!--</ion-list>-->
+										<p ion-text color="dark" class="fw700"><strong>MENU: </strong>{{Order.menu}}</p>
+										<div ion-item >
+											<p ion-text color="primary"> <span class="fw700">{{Order.timeStamp}}</span></p>
+											<ion-badge color="primary">{{ Order.totalPrice}} won</ion-badge>
+										</div>
 									</ion-card-content>
 									<ion-row>
 										<ion-col text-center>
-									<button ion-button [style.backgroundColor]="Order.buttonColor" [disabled]="Order.disableButton" ion-button full (click)="confirm(id)"  >CONFIRM</button>
+											<button ion-button [style.backgroundColor]="Order.buttonColor" [disabled]="Order.disableButton" ion-button full (click)="confirm(id)"  >CONFIRM</button>
 										</ion-col>
 									</ion-row>
-									<!--<ion-card-content [hidden]="!Order.status">-->
-										<!--<ion-grid padding >-->
-											<!--<ion-row>-->
-												<!--<ion-col>-->
-													<!--<ion-card class="green-bg full-width" no-margin text-center (click)="confirm(id)" >-->
-														<!--<ion-card-content>-->
-
-															<!--<h2 ion-text no-margin class="fw700 text-white">Confirm</h2>-->
-														<!--</ion-card-content>-->
-													<!--</ion-card>-->
-												<!--</ion-col>-->
-											<!--</ion-row>-->
-										<!--</ion-grid>-->
-									<!--</ion-card-content>-->
-
 								</ion-card>
-
-
-
 							</ion-col>
 						</ion-row>
 					</ion-grid>
-							<!--<div item-right>-->
-							<!--<ion-badge>{{ order.order.price * order.qtd | currency }}</ion-badge>-->
-							<!--</div>-->
-
-						<!--<ion-item-options>-->
-						<!--<button ion-button color="danger" (click)="removeOrder(order)">Delete</button>-->
-						<!--</ion-item-options>-->
-
-					<!--<ion-card-content>-->
-
-						<!--<h1 ion-text full large color="dark">Total Order Value</h1>-->
-						<!--<h2 ion-text full large color="dark" >\u20A9 {{totalprice}}</h2>-->
-					<!--</ion-card-content>-->
-					<!--<button ion-button full large color="dark" no-margin icon-right (click)="openCheckout()">-->
-						<!--Checkout-->
-						<!--<ion-icon name="card"></ion-icon>-->
-					<!--</button>-->
 				</ion-list>
 			</ion-col>
 		</ion-row>
 
 	</ion-grid>
 </ion-content>
-
 
