@@ -97,12 +97,17 @@ export class HomePage {
 			//	console.log(response);
 			if ( response.isSuccess() ) {
 				//TODO : 결제성공일 때 처리
-				var res = this.updateownerAsync(this.email).then(status => this.status= status).then(()=>this.updatestoreAsync(this.email)).then(
-					status => this.status = status
-				).then(()=>this.presentAlert())
-					.then(()=>this.navCtrl.push('page-home'))
+				var res = this.updateownerAsync(this.email).then(status => this.status= status
 
-				console.log(response);
+
+
+				).then(()=>this.presentAlert()).then(()=> this.navCtrl.setRoot('page-home'));
+				// 	.then(()=>this.updatestoreAsync(this.email)).then(
+				// 	status => this.status = status
+				// ).then(()=>this.presentAlert())
+				// 	.then(()=>this.navCtrl.push('page-home'))
+				//
+				// console.log(response);
 
 			}else{
 
@@ -119,6 +124,8 @@ export class HomePage {
 			title: "Payment Success",
 			buttons: ['OK']
 		});
+		console.log(this.status);
+
 		alert.present();
 	}
 	async  updateownerAsync(email){
@@ -129,7 +136,7 @@ export class HomePage {
 	_updateowner(email):Promise<any> {
 		return new Promise<any>(resolve => {
 			var status ='2'
-			var orderRef = this.db.collection('owner').where("email", "==", email).onSnapshot(querySnapshot => {
+			var orderRef = this.db.collection('owner').where("email", "==", this.email).onSnapshot(querySnapshot => {
 				querySnapshot.docChanges.forEach(change => {
 
 					const fooId = change.doc.id
