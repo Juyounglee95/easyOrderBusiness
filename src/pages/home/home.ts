@@ -98,8 +98,9 @@ export class HomePage {
 			if ( response.isSuccess() ) {
 				//TODO : 결제성공일 때 처리
 				var res = this.updateownerAsync(this.email).then(status => this.status= status).then(()=>this.updatestoreAsync(this.email)).then(
-					()=>this.presentAlert()
-				).then(()=>this.navCtrl.push('page-home'))
+					status => this.status = status
+				).then(()=>this.presentAlert())
+					.then(()=>this.navCtrl.push('page-home'))
 
 				console.log(response);
 
@@ -150,11 +151,11 @@ export class HomePage {
 	_updatestore(email):Promise<any> {
 		return new Promise<any>(resolve => {
 			var status ='2'
-			var orderRef = this.db.collection('store').where("owner", "==", email).onSnapshot(querySnapshot => {
+			var orderRef = this.db.collection('owner').where("email", "==", email).onSnapshot(querySnapshot => {
 				querySnapshot.docChanges.forEach(change => {
 
 					const fooId = change.doc.id
-					this.db.collection('store').doc(fooId).update({service_status:'2'});
+					this.db.collection('owner').doc(fooId).update({status:'2'});
 					// do something with foo and fooId
 
 				})
