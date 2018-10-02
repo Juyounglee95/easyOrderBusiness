@@ -190,26 +190,39 @@ export class HomePage {
 	_res():Promise<any> {
 		return new Promise<any>(resolve => {
 			var res:any;
-			var resRef = this.db.collection('owner');
-			var allres = resRef.get()
-				.then(snapshot => {
-					snapshot.forEach(doc => {
-						if(doc.data().email == this.email){
-						 res = doc.data().status
+			var t_status;
+			// var orderRef = this.db.collection('owner').where("email", "==", this.email).onSnapshot(querySnapshot => {
+			// 	querySnapshot.docChanges.forEach(change => {
+            //
+			// 		const fooId = change.doc.id
+			// 		this.db.collection('store').doc(fooId).update({service_status:'2'});
+			// 		// do something with foo and fooId
+            //
+			// 	})
+			// 	resolve(status);
+			// });
 
+
+
+
+
+			var resRef = this.db.collection('owner').where("email","==", this.email).onSnapshot(function (querySnapshot) {
+					querySnapshot.forEach(function (doc) {
+							t_status = doc.data().status;
+						console.log(t_status);
 						}
+					);
+					if(t_status==null){
+						t_status = '0';
+						resolve(t_status)
 
-					});
-					console.log("status: ",res);
-						resolve(res);
+					}else{
+						resolve(t_status)
+					}
+
 				}
+			);
 
-				)
-				.catch(err => {
-					//res='0'
-					//resolve(res);
-					console.log('Error getting documents', err);
-				});
 
 		})
   }
